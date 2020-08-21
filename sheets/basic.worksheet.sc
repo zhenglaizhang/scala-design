@@ -64,3 +64,10 @@ mset += "test"
 val mmap = mutable.Map[Int, String]()
 mmap += (1 -> "Go")
 mmap += (2 -> "two")
+
+def printArgs(args: Array[String]): Unit = args.foreach(println)
+def formatArgs(args: Array[String]) = args.mkString("\n")
+println(formatArgs(Array("1", "2")))
+
+val as = Array("a", "bbb", "cc")
+val longest = as.reduceLeft((a, b) => if (a.length > b.length) a else b)
