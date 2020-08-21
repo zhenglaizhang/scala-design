@@ -50,3 +50,17 @@ l(1)
 
 // no apply for tuple as each element of a tuple may be a differenttype
 (99, "aa")._1
+
+var set = Set("a", "b")
+set += "c"
+set + "d"
+set.contains("c")
+
+import scala.collection.mutable
+
+val mset = mutable.Set("H", "B")
+mset += "test"
+
+val mmap = mutable.Map[Int, String]()
+mmap += (1 -> "Go")
+mmap += (2 -> "two")
