@@ -25,3 +25,9 @@ new A
 
 A.get(1).value
 A.get().value
+
+// java.lang
+// scala
+// scala.Predef
+Predef.println(12)
+Console println 12
