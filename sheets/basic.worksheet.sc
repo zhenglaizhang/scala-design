@@ -48,3 +48,5 @@ List(2).::(1)
 val l = 1 :: 3 :: List()
 l(1)
 
+// no apply for tuple as each element of a tuple may be a differenttype
+(99, "aa")._1
