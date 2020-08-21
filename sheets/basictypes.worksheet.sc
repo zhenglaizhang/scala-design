@@ -18,3 +18,12 @@ val name = "wow"
 println(s"Hello ${name + " meow"}")
 
 println(raw"No \\\\escape")
+
+1 + 2
+1.+(2)
+1 + 2L
+1.+(2L)
+
+// infix operator
+name indexOf "o"
+name indexOf ("o", 0)
