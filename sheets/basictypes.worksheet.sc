@@ -27,3 +27,10 @@ println(raw"No \\\\escape")
 // infix operator
 name indexOf "o"
 name indexOf ("o", 0)
+
+// prefix
+-1
+(1).unary_-
+
+// postfix
+1 toLong
