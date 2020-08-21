@@ -34,3 +34,13 @@ name indexOf ("o", 0)
 
 // postfix
 1 toLong
+
+// value equality
+List(1, 2, 3) == null
+null == List(1, 2, 3)
+("He" + "llo") == "Hello"
+
+// reference equality
+// 1 eq 2
+List(1) eq List(1)
+"a" eq "a"
