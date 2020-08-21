@@ -3,3 +3,5 @@ target
 *.log
 .metals
 .bloop
+.ammonite
+metals.sbt

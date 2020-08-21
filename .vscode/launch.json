@@ -1,0 +1,36 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    // Main class configuration
+    {
+      "type": "scala",
+      "request": "launch",
+      // configuration name visible for the user
+      "name": "Main class",
+      // full name of the class to run
+      "mainClass": "com.example.Main",
+      // optional arguments for the main class
+      "args": [],
+      // optional jvm properties to use
+      "jvmOptions": [],
+      // optional build target name in case there more than one
+      // class with the same name
+      "buildTarget": "root"
+    },
+    // Test class configuration
+    {
+      "type": "scala",
+      "request": "launch",
+      // configuration name visible for the user
+      "name": "Test class",
+      // full name of the class to run
+      "testClass": "com.example.Test",
+      // optional build target name in case there more than one
+      // class with the same name
+      "buildTarget": "root"
+    }
+  ]
+}
