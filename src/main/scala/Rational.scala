@@ -1,10 +1,22 @@
+import cats.instances.boolean
 // class parameters
 // primary constructor
-class Rational(n: Int, d: Int) {
-  require(d != 0, "Denominator can not be zero")
-  println(s"Created $n/$d")
+class Rational(val numer: Int, val denom: Int) {
+  require(denom != 0, "Denominator can not be zero")
+  println(s"Created $numer/$denom")
 
-  override def toString() = n + "/" + d
+  def +(that: Rational): Rational =
+    new Rational(
+      this.numer + that.denom + that.numer * this.denom,
+      this.denom * that.denom
+    )
+
+  def <(that: Rational): Boolean =
+    this.numer * that.denom < that.numer * this.denom
+
+  def max(that: Rational): Rational = if (this < that) that else this
+
+  override def toString() = numer + "/" + denom
 }
 
 // StringBuilder => String
@@ -12,5 +24,10 @@ class Rational(n: Int, d: Int) {
 object TestRational extends App {
   val r = new Rational(1, 2)
   println(r)
-  val boom = new Rational(1, 0)
+  // val boom = new Rational(1, 0)
+  val m = new Rational(2, 3)
+  val add = r + m
+  println(add)
+
+  println(r < m)
 }
