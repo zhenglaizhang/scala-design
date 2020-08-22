@@ -19,3 +19,17 @@ val b = sum(1, _: Int, 3)
 b(12)
 
 // val c = sum
+
+//
+// closure
+//
+
+var more = 1
+val addMore = (x: Int) => x + more
+addMore(1)
+more = 10
+addMore(1)
+
+def makeIncreaser(more: Int) = (x: Int) => x + more
+val inc1 = makeIncreaser(1)
+val inc999 = makeIncreaser(999)
