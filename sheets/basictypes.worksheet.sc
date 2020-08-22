@@ -35,6 +35,8 @@ name indexOf ("o", 0)
 // postfix
 1 toLong
 
+"""|hello""".stripMargin toLowerCase
+
 // value equality
 List(1, 2, 3) == null
 null == List(1, 2, 3)
@@ -44,3 +46,10 @@ null == List(1, 2, 3)
 // 1 eq 2
 List(1) eq List(1)
 "a" eq "a"
+
+1 * 2
+1.*(2)
+List(1) ::: List(2)
+List(2).:::(List(1))
+
+{ val x = 12; List(x).:::(List(x)) }
