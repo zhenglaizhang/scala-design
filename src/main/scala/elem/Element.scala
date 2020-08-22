@@ -1,6 +1,7 @@
 package elem
 
 abstract class Element extends scala.AnyRef {
+  import Element.elem
   def contents: Array[String]
 
   def height = contents.length
@@ -8,10 +9,10 @@ abstract class Element extends scala.AnyRef {
   // UAP
   def width = if (height == 0) 0 else contents(0).length
 
-  def above(that: Element) = new ArrayElement(this.contents ++ that.contents)
+  def above(that: Element) = elem(this.contents ++ that.contents)
 
   def beside(that: Element): Element =
-    new ArrayElement(
+    elem(
       for ((l1, l2) <- this.contents zip that.contents) yield l1 + l2
     )
 
