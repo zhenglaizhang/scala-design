@@ -29,9 +29,14 @@ class Rational(n: Int, d: Int) {
   private def gcd(a: Int, b: Int): Int = if (b == 0) a else gcd(b, a % b)
 }
 
+object Rational {
+  implicit def intToRational(x: Int) = new Rational(x)
+}
+
 // StringBuilder => String
 
 object TestRational extends App {
+  import Rational._
   val r = new Rational(1, 2)
   println(r)
   // val boom = new Rational(1, 0)
@@ -44,4 +49,6 @@ object TestRational extends App {
   println(new Rational(12))
 
   println(m + 4)
+
+  println(4 + m)
 }
