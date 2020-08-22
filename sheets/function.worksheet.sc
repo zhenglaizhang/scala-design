@@ -67,3 +67,11 @@ final def boom(x: Int): Int =
 
 12
 12
+
+def containsNeg(nums: List[Int]) = nums.exists(_ < 0)
+def containsOdd(nums: List[Int]) = nums.exists(_ % 2 == 1)
+
+def curriedSum(x: Int)(y: Int) = x + y
+curriedSum(1)(2)
+val onePlus: Int => Int = curriedSum(1) _
+val x: Int => Int => Int = curriedSum _
