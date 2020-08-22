@@ -17,6 +17,8 @@ class Rational(n: Int, d: Int) {
       this.denom * that.denom
     )
 
+  def +(i: Int): Rational = new Rational(numer + i * denom, denom)
+
   def <(that: Rational): Boolean =
     this.numer * that.denom < that.numer * this.denom
 
@@ -40,4 +42,6 @@ object TestRational extends App {
   println(r < m)
 
   println(new Rational(12))
+
+  println(m + 4)
 }

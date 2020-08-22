@@ -66,3 +66,5 @@ List(2).:::(List(1))
 "robert" drop 2
 
 "bob" capitalize
+
+Thread.`yield`
