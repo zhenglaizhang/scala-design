@@ -18,6 +18,13 @@ abstract class Element extends scala.AnyRef {
   override def toString: String = contents mkString "\n"
 }
 
+// factory object with factory methods
+object Element {
+  def elem(contents: Array[String]): Element = new ArrayElement(contents)
+
+  def elem(line: String): Element = new LineElement(line)
+}
+
 class ArrayElement(override val contents: Array[String]) extends Element {}
 
 // not good
