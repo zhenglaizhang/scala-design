@@ -149,3 +149,5 @@ breakable {
     if (as.length < 100) break
   }
 }
+
+Array(1, 2, 3) zip Array("a", "b")

@@ -9,8 +9,14 @@ abstract class Element extends scala.AnyRef {
   def width = if (height == 0) 0 else contents(0).length
 }
 
-class ArrayElement(conts: Array[String]) extends Element {
-  def contents: Array[String] = conts
+class ArrayElement(override val contents: Array[String]) extends Element {}
+
+// not good
+// is line element a array element? maybe not...
+class LineElement(s: String) extends ArrayElement(Array(s)) {
+  override def width: Int = s.length
+
+  override def height: Int = 1
 }
 
 object TestElement extends App {
