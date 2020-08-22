@@ -5,6 +5,8 @@ class Rational(val numer: Int, val denom: Int) {
   require(denom != 0, "Denominator can not be zero")
   println(s"Created $numer/$denom")
 
+  def this(numer: Int) = this(numer, 1)
+
   def +(that: Rational): Rational =
     new Rational(
       this.numer + that.denom + that.numer * this.denom,
@@ -30,4 +32,6 @@ object TestRational extends App {
   println(add)
 
   println(r < m)
+
+  println(new Rational(12))
 }
