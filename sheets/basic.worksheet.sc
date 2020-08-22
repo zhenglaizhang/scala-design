@@ -75,3 +75,23 @@ val longest = as.reduceLeft((a, b) => if (a.length > b.length) a else b)
 // procedure
 def greet() = { println("wow") }
 () == greet()
+
+for (
+  i <- 1 to 10
+  if i % 2 == 0
+  if i % 3 == 0
+)
+  println(s"Iteration $i")
+
+for (i <- 1 until 10 by 4)
+  println(i)
+
+for (i <- 0 to as.length - 1)
+  println(as(i))
+
+val ss =
+  for (i <- 1 to 10)
+    yield {
+      println(i)
+      i.toString
+    }
