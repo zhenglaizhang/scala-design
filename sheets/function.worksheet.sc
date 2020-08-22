@@ -1,3 +1,4 @@
+import scala.annotation.tailrec
 val increase = (x: Int) => x + 1
 increase(12)
 
@@ -54,3 +55,15 @@ def printTime(out: java.io.PrintStream = Console.out) =
   out.println(System.currentTimeMillis())
 
 printTime()
+
+@tailrec
+final def boom(x: Int): Int =
+  if (x == 0) throw new Exception("bang")
+  else boom(x - 1)
+
+// -g:notailcalls to close TCO
+// check the call stack trace
+// boom(3)
+
+12
+12
