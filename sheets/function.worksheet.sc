@@ -33,3 +33,24 @@ addMore(1)
 def makeIncreaser(more: Int) = (x: Int) => x + more
 val inc1 = makeIncreaser(1)
 val inc999 = makeIncreaser(999)
+
+//
+// parameters
+//
+
+// repeated parameters
+def echo(args: String*): Unit = for (arg <- args) println(arg)
+echo("a", "b", "c")
+echo()
+val xs = Array("a", "c")
+echo(xs: _*)
+
+// named parameters
+echo(args = "a", "c")
+
+// default parameters
+
+def printTime(out: java.io.PrintStream = Console.out) =
+  out.println(System.currentTimeMillis())
+
+printTime()
