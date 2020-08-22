@@ -7,6 +7,15 @@ abstract class Element extends scala.AnyRef {
 
   // UAP
   def width = if (height == 0) 0 else contents(0).length
+
+  def above(that: Element) = new ArrayElement(this.contents ++ that.contents)
+
+  def beside(that: Element): Element =
+    new ArrayElement(
+      for ((l1, l2) <- this.contents zip that.contents) yield l1 + l2
+    )
+
+  override def toString: String = contents mkString "\n"
 }
 
 class ArrayElement(override val contents: Array[String]) extends Element {}
