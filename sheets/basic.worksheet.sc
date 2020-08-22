@@ -133,6 +133,15 @@ g()
 
 // better to think of finally clause as a way to ensure some side effect e.g. closing an open file
 
+val xx = 1
+
+{
+  val xx = 12
+  println(xx)
+}
+
+println(xx)
+
 import scala.util.control.Breaks._
 breakable {
   while (true) {
