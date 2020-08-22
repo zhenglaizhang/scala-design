@@ -118,3 +118,17 @@ try {
 } finally {
   println("finally cleanup")
 }
+
+def f(): Int =
+  try return 1
+  finally return 2
+
+f()
+
+def g(): Int =
+  try 1
+  finally 2
+
+g()
+
+// better to think of finally clause as a way to ensure some side effect e.g. closing an open file
