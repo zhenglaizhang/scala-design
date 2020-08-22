@@ -71,3 +71,7 @@ println(formatArgs(Array("1", "2")))
 
 val as = Array("a", "bbb", "cc")
 val longest = as.reduceLeft((a, b) => if (a.length > b.length) a else b)
+
+// procedure
+def greet() = { println("wow") }
+() == greet()
