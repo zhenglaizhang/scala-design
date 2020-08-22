@@ -1,3 +1,6 @@
+import java.io.IOException
+import java.io.FileNotFoundException
+import java.io.FileReader
 import scala.collection.mutable
 var capital = Map("US" -> "Washington", "France" -> "Pairs")
 capital += ("Janpan" -> "Tokyo")
@@ -95,3 +98,23 @@ val ss =
       println(i)
       i.toString
     }
+
+//
+// exception handling
+//
+val n = 100
+val half =
+  if (n % 2 == 0)
+    n / 2
+  else
+    // Nothing type
+    throw new RuntimeException("n must be even")
+
+try {
+  val f = new FileReader("notexists.txt")
+} catch {
+  case ex: FileNotFoundException => println("not found")
+  case ex: IOException           => println("io exception")
+} finally {
+  println("finally cleanup")
+}
