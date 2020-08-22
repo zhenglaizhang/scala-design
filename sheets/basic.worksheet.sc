@@ -132,3 +132,11 @@ def g(): Int =
 g()
 
 // better to think of finally clause as a way to ensure some side effect e.g. closing an open file
+
+import scala.util.control.Breaks._
+breakable {
+  while (true) {
+    println(as)
+    if (as.length < 100) break
+  }
+}
