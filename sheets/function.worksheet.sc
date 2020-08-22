@@ -1,3 +1,6 @@
+import java.util.Date
+import java.io.PrintWriter
+import java.io.File
 import scala.annotation.tailrec
 val increase = (x: Int) => x + 1
 increase(12)
@@ -75,3 +78,19 @@ def curriedSum(x: Int)(y: Int) = x + y
 curriedSum(1)(2)
 val onePlus: Int => Int = curriedSum(1) _
 val x: Int => Int => Int = curriedSum _
+
+def twice(op: Double => Double, x: Double) = op(op(x))
+twice(_ + 1, 4)
+
+def withPrinter(file: File)(op: PrintWriter => Unit) = {
+  val writer = new PrintWriter(file)
+  try {
+    op(writer)
+  } finally {
+    writer.close()
+  }
+}
+
+// withPrinter(new File(".")) { printer =>
+//   printer.print(new Date())
+// }
