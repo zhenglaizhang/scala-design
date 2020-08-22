@@ -59,3 +59,23 @@ queue.put(10)
 queue.put(1)
 queue.get
 queue.get
+
+abstract class Fruit(
+    val name: String,
+    val color: String
+)
+
+object Fruits {
+  object Apple extends Fruit("apple", "red")
+}
+
+def showFruit(fruit: Fruit) = {
+  import fruit._
+  println(name + "s are " + color)
+}
+showFruit(Fruits.Apple)
+
+// implicit imports
+// java.lang._
+// scala._
+// Predef._
