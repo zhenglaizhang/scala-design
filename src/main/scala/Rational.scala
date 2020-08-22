@@ -1,11 +1,15 @@
 import cats.instances.boolean
 // class parameters
 // primary constructor
-class Rational(val numer: Int, val denom: Int) {
-  require(denom != 0, "Denominator can not be zero")
+class Rational(n: Int, d: Int) {
+  require(d != 0, "Denominator can not be zero")
+
+  private val g = gcd(n.abs, d.abs)
+  val numer = n / g
+  val denom = d / g
   println(s"Created $numer/$denom")
 
-  def this(numer: Int) = this(numer, 1)
+  def this(n: Int) = this(n, 1)
 
   def +(that: Rational): Rational =
     new Rational(
@@ -19,6 +23,8 @@ class Rational(val numer: Int, val denom: Int) {
   def max(that: Rational): Rational = if (this < that) that else this
 
   override def toString() = numer + "/" + denom
+
+  private def gcd(a: Int, b: Int): Int = if (b == 0) a else gcd(b, a % b)
 }
 
 // StringBuilder => String
