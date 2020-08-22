@@ -36,4 +36,10 @@ x1 ne x2
 
 def error(msg: String): Nothing = throw new RuntimeException(msg)
 
+// value class
+// class Dollars(val amount: Int) extends AnyVal {
+//   override def toString(): String = "$" + amount
+// }
+
+// define a tiny type for each domain concept
 
