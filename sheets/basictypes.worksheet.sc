@@ -53,3 +53,16 @@ List(1) ::: List(2)
 List(2).:::(List(1))
 
 { val x = 12; List(x).:::(List(x)) }
+
+// Rich wrappers
+0 max 4
+
+-2.7 abs
+
+1.5 isInfinity
+
+4 to 6
+
+"robert" drop 2
+
+"bob" capitalize
