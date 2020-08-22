@@ -94,3 +94,7 @@ def withPrinter(file: File)(op: PrintWriter => Unit) = {
 // withPrinter(new File(".")) { printer =>
 //   printer.print(new Date())
 // }
+
+def byNameAssert(predicate: => Boolean) =
+  if (!predicate) throw new AssertionError
+byNameAssert(4 > 1)
