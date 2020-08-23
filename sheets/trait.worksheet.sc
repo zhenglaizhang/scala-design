@@ -80,7 +80,7 @@ showFruit(Fruits.Apple)
 // scala._
 // Predef._
 
-abstract class Expr
+sealed abstract class Expr
 case class Var(name: String) extends Expr
 case class Number(num: Double) extends Expr
 case class UnOp(operator: String, arg: Expr) extends Expr
@@ -148,3 +148,9 @@ def isIntIntMap(x: Any) =
 isIntIntMap(Map("abc" -> "abc"))
 isIntIntMap(Array(1))
 isIntIntMap(Array("1"))
+
+def describe(e: Expr): String =
+  (e: @unchecked) match {
+    case Number(_) => "number"
+    case Var(_)    => "var"
+  }
