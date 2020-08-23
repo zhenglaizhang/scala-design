@@ -96,8 +96,21 @@ val button = new java.awt.Button
 button.addActionListener(new ActionListener {
   def actionPerformed(x: ActionEvent): Unit = ???
 })
-implicit def function2ActionListener(f: ActionEvent => Uit) =
+implicit def function2ActionListener(f: ActionEvent => Unit) =
   new ActionListener {
     def actionPerformed(x: ActionEvent): Unit = f(x)
   }
 button.addActionListener(x => {})
+
+case class Rectangle(width: Int, height: Int)
+implicit class RectangleMaker(width: Int) {
+  def x(height: Int) = Rectangle(width, height)
+}
+
+val rec = 12 x 3
+
+// context bound
+def max[T: Ordering](xs: List[T]): T = {
+  // implicitly[Ordering[T]].compare()
+  ???
+}
