@@ -42,4 +42,3 @@ def error(msg: String): Nothing = throw new RuntimeException(msg)
 // }
 
 // define a tiny type for each domain concept
-

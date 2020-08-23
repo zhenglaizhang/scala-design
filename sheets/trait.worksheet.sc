@@ -182,3 +182,8 @@ val second: PartialFunction[List[Int], Int] = {
 }
 
 second.isDefinedAt(Nil)
+
+for ((a, b) <- Map(1 -> 2))
+  println(s"$a -> $b")
+
+for (Some(fruit) <- List(Some("apple"), None)) println(fruit)
