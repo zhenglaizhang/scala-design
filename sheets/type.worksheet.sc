@@ -67,3 +67,25 @@ type AnimalThatEatGrass = Animal { type SuitableFood = Grass }
 class Pasture {
   var animals: List[Animal { type SuitableFood = Grass }] = Nil
 }
+
+object Color extends Enumeration {
+  val Red, Green, Blue = Value
+}
+// path dependent type
+import Color._
+
+Red
+Green
+Blue
+
+object Direction extends Enumeration {
+  val North = Value("North")
+  val East = Value("East")
+}
+for (d <- Direction.values)
+  println(d + " ")
+
+Direction.North.id
+Direction.East.id
+Direction(1)
+// Direction(100)
