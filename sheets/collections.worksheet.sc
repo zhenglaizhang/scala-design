@@ -58,3 +58,20 @@ buf += 1
 buf += 2
 3 +=: buf
 buf.toList
+
+class Time {
+  var hour = 12
+  var minute = 0
+}
+
+class GenerateddTime {
+  private[this] var h = 12
+  private[this] var m = 0
+
+  def hour: Int = h
+  def hour_=(x: Int) = { h = x }
+
+  def minute: Int = m
+  def minute_=(x: Int) = { m = x }
+
+}
