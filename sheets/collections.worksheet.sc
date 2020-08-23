@@ -75,3 +75,28 @@ class GenerateddTime {
   def minute_=(x: Int) = { m = x }
 
 }
+
+class SlowAppendQueue[T](elems: List[T]) {
+  def head = elems.head
+  def tail = new SlowAppendQueue(elems.tail)
+  def enqueue(x: T) = new SlowAppendQueue(elems ::: List(x))
+}
+
+trait Queue[T] {
+  def head: T
+  def tail: Queue[T]
+  def enqueue(x: T): Queue[T]
+}
+
+object Queue {
+  def apply[T](xs: T*): Queue[T] = new QueueImpl(xs.toList, Nil)
+
+  private class QueueImpl[T](
+      private val leading: List[T],
+      private val trailing: List[T]
+  ) extends Queue[T] {
+    override def head: T = ???
+    override def tail: Queue[T] = ???
+    override def enqueue(x: T): Queue[T] = ???
+  }
+}
