@@ -82,10 +82,12 @@ class SlowAppendQueue[T](elems: List[T]) {
   def enqueue(x: T) = new SlowAppendQueue(elems ::: List(x))
 }
 
-trait Queue[T] {
+// type constructor
+// generic trait
+trait Queue[+T] {
   def head: T
   def tail: Queue[T]
-  def enqueue(x: T): Queue[T]
+  def enqueue[U >: T](x: U): Queue[U]
 }
 
 object Queue {
@@ -97,6 +99,34 @@ object Queue {
   ) extends Queue[T] {
     override def head: T = ???
     override def tail: Queue[T] = ???
-    override def enqueue(x: T): Queue[T] = ???
+    override def enqueue[U >: T](x: U): Queue[U] = ???
   }
 }
+
+// Scala array in invariant (rigid)
+val a1: Array[String] = Array("abc")
+// val a2: Array[AnyRef] = a1
+val a3 = a1.asInstanceOf[Array[AnyRef]]
+
+// contravariant output channel
+trait OutputChannel[-T] {
+  def write(t: T)
+}
+
+var strOutput = new OutputChannel[String] {
+  def write(t: String) = {}
+}
+
+var anyOutput = new OutputChannel[AnyRef] {
+  def write(t: AnyRef): Unit = {}
+}
+
+strOutput.write("abc")
+
+anyOutput.write("abc")
+anyOutput.write(List(1, 2))
+// anyOutput = strOutput
+strOutput = anyOutput
+
+def upperBounds[T <: Ordered[T]](xs: List[T]): List[T] =
+  xs.sortWith((a, b) => a < b)
