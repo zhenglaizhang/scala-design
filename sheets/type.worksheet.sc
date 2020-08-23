@@ -1,3 +1,5 @@
+import java.awt.event.ActionEvent
+import java.awt.event.ActionListener
 trait Abstract {
   type T
   def tansform(x: T): T
@@ -89,3 +91,13 @@ Direction.North.id
 Direction.East.id
 Direction(1)
 // Direction(100)
+
+val button = new java.awt.Button
+button.addActionListener(new ActionListener {
+  def actionPerformed(x: ActionEvent): Unit = ???
+})
+implicit def function2ActionListener(f: ActionEvent => Uit) =
+  new ActionListener {
+    def actionPerformed(x: ActionEvent): Unit = f(x)
+  }
+button.addActionListener(x => {})
