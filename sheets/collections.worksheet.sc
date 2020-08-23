@@ -51,3 +51,10 @@ List.concat(List(1), List(2), List(3))
 (List("abc", "de"), List(3, 2)).zipped.forall(_.length == _)
 
 def notImplemented = ???
+
+import scala.collection.mutable.ListBuffer
+val buf = new ListBuffer[Int]
+buf += 1
+buf += 2
+3 +=: buf
+buf.toList
