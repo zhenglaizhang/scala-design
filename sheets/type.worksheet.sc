@@ -61,3 +61,9 @@ bessy eat (new bessy.SuitableFood)
 bessy eat (new Grass)
 val meow = new Cow
 meow eat (new bessy.SuitableFood)
+
+type AnimalThatEatGrass = Animal { type SuitableFood = Grass }
+
+class Pasture {
+  var animals: List[Animal { type SuitableFood = Grass }] = Nil
+}
