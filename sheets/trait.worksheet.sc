@@ -79,3 +79,72 @@ showFruit(Fruits.Apple)
 // java.lang._
 // scala._
 // Predef._
+
+abstract class Expr
+case class Var(name: String) extends Expr
+case class Number(num: Double) extends Expr
+case class UnOp(operator: String, arg: Expr) extends Expr
+case class BinOp(operator: String, left: Expr, right: Expr) extends Expr
+val v = Var("x")
+val op = BinOp("+", Number(1), v)
+op.copy(operator = "-")
+UnOp("-", UnOp("-", null)) // double negation
+BinOp("+", null, Number(0)) // null
+
+def simplifyTop(expr: Expr): Expr =
+  expr match {
+    case UnOp("-", UnOp("-", e))         => e
+    case UnOp("abs", e @ UnOp("abs", _)) => e
+    case BinOp("+", e, Number(0))        => e
+    case BinOp("*", e, Number(1))        => e
+    case BinOp("+", x, y) if x == y      => BinOp("*", x, Number(2))
+    case _                               => expr
+  }
+
+simplifyTop(UnOp("-", UnOp("-", Var("x"))))
+
+val pi = math.Pi
+math.E match {
+  case pi => "strange? Pi=" + pi
+  // case _  => "error"
+}
+
+math.E match {
+  case `pi` => "a real pi"
+  case _    => "not a real pi"
+}
+
+List(0, 1) match {
+  case List(0, _, _) => println("fond 0")
+  case List(1)       => "got"
+  case List(0, _*)   => "start with 0, length is not 3"
+  case Nil           => "nil"
+  case _             => "others"
+}
+
+(1, 2) match {
+  case (_, 2) => println("tuple end with 2")
+  case _      => "boom"
+}
+
+def generalSize(x: Any) =
+  x match {
+    case s: String    => s.length
+    case m: Map[_, _] => m.size
+    case _            => -1
+  }
+
+generalSize("abc")
+generalSize(1)
+generalSize(Map(1 -> 1))
+
+// type erasure
+def isIntIntMap(x: Any) =
+  x match {
+    case m: Map[Int, Int] => "mapint"
+    case a: Array[String] => "str array"
+    case _                => "boom"
+  }
+isIntIntMap(Map("abc" -> "abc"))
+isIntIntMap(Array(1))
+isIntIntMap(Array("1"))
