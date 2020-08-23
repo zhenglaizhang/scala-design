@@ -43,3 +43,21 @@ object LazyDemo {
 }
 LazyDemo
 LazyDemo.x
+
+class Food
+abstract class Animal {
+  type SuitableFood <: Food
+  def eat(food: SuitableFood)
+}
+
+class Grass extends Food
+class Cow extends Animal {
+  type SuitableFood = Grass
+  override def eat(food: SuitableFood): Unit = {}
+}
+
+val bessy = new Cow
+bessy eat (new bessy.SuitableFood)
+bessy eat (new Grass)
+val meow = new Cow
+meow eat (new bessy.SuitableFood)
