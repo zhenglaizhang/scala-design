@@ -154,3 +154,12 @@ def describe(e: Expr): String =
     case Number(_) => "number"
     case Var(_)    => "var"
   }
+
+def show(x: Option[String]) =
+  x match {
+    case Some(s) => s
+    case None    => "?"
+  }
+
+show(Some("a"))
+show(None)
