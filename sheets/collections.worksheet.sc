@@ -49,3 +49,5 @@ List.concat()
 List.concat(List(1), List(2), List(3))
 
 (List("abc", "de"), List(3, 2)).zipped.forall(_.length == _)
+
+def notImplemented = ???
