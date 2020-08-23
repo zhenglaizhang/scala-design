@@ -163,3 +163,22 @@ def show(x: Option[String]) =
 
 show(Some("a"))
 show(None)
+
+// patterns everywhere
+val t = 123 -> "abc"
+val (number, str) = t
+
+// partial function
+val withDefault: Option[Int] => Int = {
+  case Some(x) => x
+  case None    => 0
+}
+
+withDefault(Some(1))
+withDefault(None)
+
+val second: PartialFunction[List[Int], Int] = {
+  case x :: y :: _ => y
+}
+
+second.isDefinedAt(Nil)
