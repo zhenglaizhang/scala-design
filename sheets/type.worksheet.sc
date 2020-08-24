@@ -130,5 +130,19 @@ for {
   if (n startsWith "a")
 } yield n
 
+persons map (_.name) withFilter (_ startsWith "a") map identity
+
 for (x <- List(1, 2); y <- List("one", "two"))
   yield (x, y)
+
+val xss = List(List(1, 2), List(3, 4))
+var sum = 0
+for (
+  xs <- xss;
+  x <- xs
+) sum += x
+
+println(sum)
+var sum2 = 0
+xss foreach (xs => xs foreach (x => sum2 += x))
+println(sum2)
