@@ -120,3 +120,15 @@ val lb = new mutable.ListBuffer[Int]()
 lb += 12
 lb += 1
 lb.toList
+
+case class Person(name: String)
+val persons = List(Person("a"), Person("b"))
+
+for {
+  p <- persons
+  n = p.name
+  if (n startsWith "a")
+} yield n
+
+for (x <- List(1, 2); y <- List("one", "two"))
+  yield (x, y)
