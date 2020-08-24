@@ -1,4 +1,4 @@
-object Email {
+object Email extends ((String, String) => String) {
   def apply(user: String, domain: String) = user + "@" + domain
 
   def unapply(str: String): Option[(String, String)] = {
@@ -11,3 +11,12 @@ object Email {
 }
 
 Email("zhenglai", "hotmail")
+Email.unapply("zhenglaizhang@hotmail.com") equals Some(
+  "zhenglaizhang",
+  "hotmail.com"
+)
+Email.unapply("test") == None
+
+"wow@hotmail.com" match {
+  case Email(user, domain) => println(user)
+}
