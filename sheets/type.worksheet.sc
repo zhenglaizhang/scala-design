@@ -1,3 +1,4 @@
+import scala.collection.mutable
 import java.awt.event.ActionEvent
 import java.awt.event.ActionListener
 trait Abstract {
@@ -114,3 +115,8 @@ def max[T: Ordering](xs: List[T]): T = {
   // implicitly[Ordering[T]].compare()
   ???
 }
+
+val lb = new mutable.ListBuffer[Int]()
+lb += 12
+lb += 1
+lb.toList
