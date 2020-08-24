@@ -146,3 +146,13 @@ println(sum)
 var sum2 = 0
 xss foreach (xs => xs foreach (x => sum2 += x))
 println(sum2)
+
+abstract class C[A] {
+  def map[B](f: A => B): C[B]
+  def flatMap[B](f: A => C[B]): C[B]
+  // return not a C object but just a wrapper object
+  // that remembers that elements to be filtered before
+  // being processed further
+  def withFilter(p: A => Boolean): C[A]
+  def foreach(f: A => Unit): Unit
+}
