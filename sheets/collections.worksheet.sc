@@ -142,3 +142,16 @@ LinearSeq(1, 2, 3)
 
 List(1, 2) ++ List(3, 4)
 List(1, 2) ++: List(3, 4)
+
+val xs1 = List(1, 2, 3, 4, 5)
+val git = xs1 grouped 3
+git.next()
+git.next()
+val sit = xs1 sliding 3
+sit.next()
+sit.next()
+sit.next()
+// sit.next() // NoSuchElementError
+
+1 to 14 by 4
+1 until 3
