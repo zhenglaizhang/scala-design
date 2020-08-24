@@ -1,3 +1,6 @@
+import scala.collection.LinearSeq
+import scala.collection.mutable
+import scala.collection.SortedSet
 val empty: List[Nothing] = List()
 val x: List[String] = empty
 
@@ -130,3 +133,12 @@ strOutput = anyOutput
 
 def upperBounds[T <: Ordered[T]](xs: List[T]): List[T] =
   xs.sortWith((a, b) => a < b)
+
+Traversable(1, 2, 3)
+Iterable(1, 2, 3)
+SortedSet("hello", "a")
+mutable.Buffer(1, 2, 3)
+LinearSeq(1, 2, 3)
+
+List(1, 2) ++ List(3, 4)
+List(1, 2) ++: List(3, 4)
