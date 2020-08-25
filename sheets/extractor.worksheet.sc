@@ -1,3 +1,5 @@
+import scala.beans.BooleanBeanProperty
+import scala.beans.BeanProperty
 import scala.util.matching.Regex
 object Email extends ((String, String) => String) {
   def apply(user: String, domain: String) = user + "@" + domain
@@ -61,3 +63,25 @@ val DecimalPat(sign1, integerPart1, decimalPart1) = "1.0"
 
 for (DecimalPat(s, i, d) <- DecimalPat findAllIn input)
   println(s"$s  $i  $d")
+
+@deprecated("use newShinyMethod() instead", "v18.01")
+def bigMistake() = ???
+
+("ab": @unchecked) match {
+  case "a"  => "aaa"
+  case "ab" => "boom"
+}
+
+@volatile var xx = 12
+
+@SerialVersionUID(123L)
+class Wow extends Serializable {
+  @BeanProperty
+  @transient var i = 12
+
+  @BooleanBeanProperty
+  var b = false
+
+  @native
+  def beginCountDown() = {}
+}
