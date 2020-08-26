@@ -103,5 +103,4 @@ class Point(val x: Int, val y: Int) {
       case _           => false
     }
 }
-
 new Point(1, 2).equals(null)
