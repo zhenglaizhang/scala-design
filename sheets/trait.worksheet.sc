@@ -1,3 +1,5 @@
+import java.util.function.IntUnaryOperator
+import java.{util => ju}
 import scala.collection.mutable
 // trait
 // widen thin interface to rich ones
@@ -203,3 +205,20 @@ increaseOne(
 
 // use functional literal, no need to convert to Increaser
 increaseOne(_ + 1)
+
+val stream = ju.Arrays
+  .stream(Array(1, 2, 3))
+
+stream.map(new IntUnaryOperator {
+  def applyAsInt(x: Int): Int = x + 1
+})
+
+ju.Arrays.stream(Array(1, 2, 3)).map(i => i + 1).toArray
+
+val f = (i: Int) => i + 1
+// type mismatch
+// only functional literals will be adapted to SAM types, not arbitary expressions that have a function type
+// ju.Arrays.stream(Array(1, 2, 3)).map(f)
+ju.Arrays.stream(Array(1, 2, 3)).map(i => f(i))
+val g: IntUnaryOperator = (i: Int) => i + 1
+ju.Arrays.stream(Array(1, 2, 3)).map(g).toArray
