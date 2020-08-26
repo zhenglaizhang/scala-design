@@ -85,3 +85,23 @@ class Wow extends Serializable {
   @native
   def beginCountDown() = {}
 }
+
+def ==(thiz: AnyRef, that: AnyRef): Boolean =
+  if (null eq thiz) { null eq that }
+  else { thiz equals that }
+
+==("abc", "abc")
+==(null, "abc")
+
+class Point(val x: Int, val y: Int) {
+
+  override def hashCode(): Int = (x, y).##
+
+  override def equals(other: Any): Boolean =
+    other match {
+      case that: Point => this.x == that.x && this.y == that.y
+      case _           => false
+    }
+}
+
+new Point(1, 2).equals(null)
