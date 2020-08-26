@@ -187,3 +187,19 @@ for ((a, b) <- Map(1 -> 2))
   println(s"$a -> $b")
 
 for (Some(fruit) <- List(Some("apple"), None)) println(fruit)
+
+// SAM
+trait Increaser {
+  def increase(i: Int): Int
+}
+
+def increaseOne(increaser: Increaser): Int = increaser.increase(1)
+
+increaseOne(
+  new Increaser {
+    def increase(i: Int): Int = i + 1
+  }
+)
+
+// use functional literal, no need to convert to Increaser
+increaseOne(_ + 1)
