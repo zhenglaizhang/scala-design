@@ -102,3 +102,23 @@ Future { -1 / 0 } transform {
   case Success(value) => Success(value.abs + 2)
   case Failure(_)     => Success(0)
 }
+
+val f1 = Future(1) zip Future(2)
+f1.value
+val f2 = Future(1) zip Future(1 / 0)
+f2.value
+
+Future.foldLeft(List(Future(1), Future(2)))(0)(_ + _)
+Future.reduceLeft(List(Future(1), Future(2))) { (acc, num) => acc + num }
+
+// NoSuchElementException
+Future.reduceLeft(List.empty[Future[Int]]) { (acc, num) => acc + num }
+
+val f3 = Future.sequence(List(Future(1), Future(2)))
+f3.value
+
+val traversed: Future[List[Int]] = Future.traverse(List(1, 2, 3)) { i =>
+  Future(i)
+}
+
+
