@@ -223,3 +223,20 @@ ju.Arrays.stream(Array(1, 2, 3)).map(i => f(i))
 val g: IntUnaryOperator = (i: Int) => i + 1
 ju.Arrays.stream(Array(1, 2, 3)).map(g).toArray
 
+abstract class SetAndType {
+  type Elem
+  val set: mutable.Set[Elem]
+}
+
+def javaSet2ScalaSet[T](jset: ju.Collection[T]): SetAndType = {
+  val sset = mutable.Set.empty[T] // now T can be named
+  val iter = jset.iterator
+  while (iter.hasNext()) {
+    sset += iter.next()
+  }
+
+  return new SetAndType {
+    type Elem = T
+    val set = sset
+  }
+}
