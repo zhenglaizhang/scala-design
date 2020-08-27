@@ -1,3 +1,4 @@
+import scala.concurrent.Await
 import scala.concurrent.Promise
 import scala.concurrent.Future
 import scala.util.Failure
@@ -131,3 +132,15 @@ val newf = Future(1) andThen {
   case Success(value)     => println(value)
   case Failure(exception) => println(exception)
 }
+
+Future { Future(1) }.flatten
+
+// === zip + map
+Future(12).zipWith(Future("12")) {
+  case (num, str) => s"$num is the $str"
+}
+
+import scala.concurrent.duration._
+val fut3 = Future { Thread.sleep(20); 21 + 21 }
+// Await.result(fut3, 1 seconds)
+// Await.ready()
