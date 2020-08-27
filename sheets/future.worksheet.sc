@@ -60,3 +60,15 @@ f.value
 Future(-1) collect {
   case res if res > 0 => res + 12
 }
+
+val failure = Future { 1 / 0 }
+failure.value
+val expectedFailure = failure.failed
+expectedFailure.value
+val fallback = failure.fallbackTo(Future { 1 / 1 })
+fallback.value
+
+val failedFallback = failure.fallbackTo(
+  Future { val res = 21; require(res < 0); res }
+)
+failedFallback.value
