@@ -72,3 +72,15 @@ val failedFallback = failure.fallbackTo(
   Future { val res = 21; require(res < 0); res }
 )
 failedFallback.value
+
+Future { 1 / 0 }.fallbackTo(Future { println("fallback") })
+
+val recovered = failedFallback recover {
+  case ex: ArithmeticException => -1
+}
+recovered.isCompleted
+recovered.value
+
+Future { 1 / 0 } recoverWith {
+  case ex: ArithmeticException => Future { 1 + 1 }
+}
