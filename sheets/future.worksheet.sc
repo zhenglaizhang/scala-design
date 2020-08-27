@@ -84,3 +84,21 @@ recovered.value
 Future { 1 / 0 } recoverWith {
   case ex: ArithmeticException => Future { 1 + 1 }
 }
+
+Future { 1 / 0 } transform (res => res + 1, ex =>
+  new Exception("see cause", ex))
+
+Future { 1 / 1 } transform (
+  res => res + 1,
+  ex => ex
+)
+Future { 1 / 1 } transform {
+  case Success(res) => Success(res * -1)
+  case Failure(ex)  => Failure(new Exception(ex))
+}
+
+// transform a failure into a success
+Future { -1 / 0 } transform {
+  case Success(value) => Success(value.abs + 2)
+  case Failure(_)     => Success(0)
+}
