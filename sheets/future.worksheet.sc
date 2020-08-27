@@ -121,4 +121,13 @@ val traversed: Future[List[Int]] = Future.traverse(List(1, 2, 3)) { i =>
   Future(i)
 }
 
+// foreach
+Future(1) onComplete {
+  case Success(value) => println(value)
+  case Failure(ex)    => println(ex)
+}
 
+val newf = Future(1) andThen {
+  case Success(value)     => println(value)
+  case Failure(exception) => println(exception)
+}
