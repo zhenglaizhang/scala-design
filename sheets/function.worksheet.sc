@@ -98,3 +98,4 @@ def withPrinter(file: File)(op: PrintWriter => Unit) = {
 def byNameAssert(predicate: => Boolean) =
   if (!predicate) throw new AssertionError
 byNameAssert(4 > 1)
+

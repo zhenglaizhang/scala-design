@@ -1,4 +1,3 @@
-
 // The simplest possible sbt build file is just one line:
 
 scalaVersion := "2.13.3"
@@ -21,10 +20,10 @@ version := "1.0"
 // mostly only necessary if you intend to publish your library's binaries on a
 // place like Sonatype or Bintray.
 
-
 // Want to use a published library in your project?
 // You can define other libraries as dependencies in your build like this:
-libraryDependencies += "org.typelevel" %% "cats-core" % "2.0.0"
+libraryDependencies +=
+  "org.typelevel" %% "cats-core" % "2.1.0"
 // Here, `libraryDependencies` is a set of dependencies, and by using `+=`,
 // we're adding the cats dependency to the set of dependencies that sbt will go
 // and fetch when it starts up.
@@ -73,3 +72,13 @@ libraryDependencies += "org.typelevel" %% "cats-core" % "2.0.0"
 
 // To learn more about multi-project builds, head over to the official sbt
 // documentation at http://www.scala-sbt.org/documentation.html
+
+// https://docs.scala-lang.org/overviews/compiler-options/index.html#Warning_Settings
+scalacOptions ++= Seq(
+  "-encoding",
+  "utf8",
+  "-deprecation",
+  "Xfatal-warnings", // promotes the warnings to compiler error, so it cannot be ignored
+  "-Xlint", // enables a bunch of compiler warnings.
+  "-unchecked"
+)
