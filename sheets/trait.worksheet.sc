@@ -222,3 +222,4 @@ val f = (i: Int) => i + 1
 ju.Arrays.stream(Array(1, 2, 3)).map(i => f(i))
 val g: IntUnaryOperator = (i: Int) => i + 1
 ju.Arrays.stream(Array(1, 2, 3)).map(g).toArray
+
