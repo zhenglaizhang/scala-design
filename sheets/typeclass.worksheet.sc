@@ -35,3 +35,17 @@ implicit val catPrinter = new Printable[Cat] {
   override def print(a: Cat): String = s"${a.name} has color ${a.color}"
 }
 Printable.print(cat)
+
+object PrintableSyntax {
+  implicit class PrintableOps[A](a: A) {
+    def format()(implicit p: Printable[A]): String = p.print(a)
+
+    def print()(implicit p: Printable[A]): Unit = println(p.print(a))
+  }
+}
+
+import PrintableSyntax._
+12.format
+12.print
+cat.format
+cat.print
