@@ -75,6 +75,7 @@ libraryDependencies +=
 scalacOptions ++= Seq(
   "-encoding",
   "utf8",
+  "-feature",
   "-deprecation",
   "Xfatal-warnings", // promotes the warnings to compiler error, so it cannot be ignored
   "-Xlint", // enables a bunch of compiler warnings.
