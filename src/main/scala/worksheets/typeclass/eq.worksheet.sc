@@ -33,3 +33,11 @@ val x = new ju.Date()
 val y = new ju.Date()
 x === y
 x === x
+
+case class Cat(name: String, age: Int, color: String)
+import cats.instances.string._
+implicit val catEq: Eq[Cat] = Eq.instance { (c1, c2) =>
+  c1.name === c2.name && c1.age === c2.age && c1.color === c2.color
+}
+
+Option(Cat("name", 1, "red")) === Option.empty[Cat]
