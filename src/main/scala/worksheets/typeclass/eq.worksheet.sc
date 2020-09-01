@@ -41,3 +41,6 @@ implicit val catEq: Eq[Cat] = Eq.instance { (c1, c2) =>
 }
 
 Option(Cat("name", 1, "red")) === Option.empty[Cat]
+
+// - Number => + String 12.0 => ""
+// - Int => + String 12 => ""
