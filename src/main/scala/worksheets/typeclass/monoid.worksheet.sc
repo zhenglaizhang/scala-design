@@ -38,7 +38,16 @@ implicit val orderMonoid = Monoid.instance[Order](
 )
 
 def add[A](items: List[A])(implicit m: Monoid[A]): A =
-  items.foldLeft(m.empty)(m.combine)
+  items.foldRight(m.empty)(_ |+| _)
 
 add(List(1, 2, 3))
 add(List(Order(1, 1), Order(2, 3)))
+
+import cats.instances.tuple._
+("hello", 123) |+| (("world", 234))
+Option(1) |+| Option(2)
+Option(1) |+| Option.empty
+import cats.instances.map._
+Map("a" -> 1, "b" -> 2) |+| Map("a" -> 3, "d" -> 4)
+
+add(List(None, Some(1), Some(2)))
