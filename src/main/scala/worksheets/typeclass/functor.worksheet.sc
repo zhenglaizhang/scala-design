@@ -1,3 +1,4 @@
+import scala.concurrent.ExecutionContext
 import scala.concurrent.Await
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -36,3 +37,28 @@ object functor {
     def map[A, B](fa: F[A])(f: A => B): F[B]
   }
 }
+
+import cats.Functor
+import cats.instances.list._
+import cats.instances.option._
+
+Functor[List].map(List(1, 2, 3))(_ * 2)
+Functor[Option].map(Option(123))(_.toString)
+
+val liftedFunc = Functor[Option].lift(func)
+liftedFunc(Option(123))
+liftedFunc(Option.empty)
+
+Functor[List].as(List(1, 2, 3), "As")
+
+def doMath[F[_]](start: F[Int])(implicit functor: Functor[F]): F[Int] =
+  start.map(_ + 1 * 2)
+doMath(Option(20))
+doMath(List(1, 2, 3))
+
+// implicit def futureFunctor(implicit ec: ExecutionContext): Functor[Future] =
+//   new Functor[Future] {
+//     def map[A, B](fa: Future[A])(f: A => B): Future[B] = fa.map(f)
+//   }
+
+// Functor.apply[Future]
