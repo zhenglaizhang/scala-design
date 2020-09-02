@@ -30,3 +30,9 @@ val func = ((x: Int) => x.toDouble)
   .map(_ * 2)
   .map(n => s"${n}")
 func(123)
+
+object functor {
+  trait Functor[F[_]] {
+    def map[A, B](fa: F[A])(f: A => B): F[B]
+  }
+}
