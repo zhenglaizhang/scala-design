@@ -128,3 +128,17 @@ encode(Box(123))
 encode(Box(true))
 decode[Boolean]("true")
 decode[Box[Boolean]]("false")
+
+import cats.Contravariant
+import cats.Show
+import cats.instances.string._
+
+val showString = Show[String]
+val showSymbol =
+  Contravariant[Show].contramap(showString)((sym: Symbol) => s"${sym.name}")
+showSymbol.show(Symbol("dave"))
+
+import cats.syntax.contravariant._
+showString
+  .contramap[Symbol](sym => s"${sym.name}")
+  .show(Symbol("dave"))
