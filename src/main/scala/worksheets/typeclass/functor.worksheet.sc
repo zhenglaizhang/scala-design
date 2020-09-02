@@ -62,3 +62,38 @@ doMath(List(1, 2, 3))
 //   }
 
 // Functor.apply[Future]
+
+trait Printable[A] { self =>
+  def format(value: A): String
+
+  def contramap[B](func: B => A): Printable[B] =
+    new Printable[B] {
+      def format(value: B): String = self.format(func(value))
+    }
+}
+
+def format[A](value: A)(implicit p: Printable[A]): String = p.format(value)
+
+implicit val strPrintable: Printable[String] = new Printable[String] {
+  def format(value: String): String = s"${value}"
+}
+implicit val boolPrintable: Printable[Boolean] = new Printable[Boolean] {
+  def format(value: Boolean): String = if (value) "yes" else "no"
+}
+
+format("hello")
+format(true)
+format(false)
+
+final case class Box[A](value: A)
+
+// implicit def boxPrintable[A](implicit p: Printable[A]): Printable[Box[A]] =
+//   new Printable[Box[A]] {
+//     override def format(value: Box[A]): String = p.format(value.value)
+//   }
+
+implicit def boxPrintable[A](implicit p: Printable[A]): Printable[Box[A]] =
+  p.contramap(box => box.value)
+
+format(Box("hello world"))
+format(Box(true))
