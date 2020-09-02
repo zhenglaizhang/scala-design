@@ -20,8 +20,14 @@ version := "0.1"
 // mostly only necessary if you intend to publish your library's binaries on a
 // place like Sonatype or Bintray.
 
-libraryDependencies +=
-  "org.typelevel" %% "cats-core" % "2.1.0"
+lazy val akkaVersion = "2.6.8"
+libraryDependencies ++= Seq(
+  "org.typelevel" %% "cats-core" % "2.1.0",
+  "com.typesafe.akka" %% "akka-actor-typed" % akkaVersion,
+  "ch.qos.logback" % "logback-classic" % "1.2.3",
+  "com.typesafe.akka" %% "akka-actor-testkit-typed" % akkaVersion % Test,
+  "org.scalatest" %% "scalatest" % "3.1.0" % Test
+)
 // Here, `libraryDependencies` is a set of dependencies, and by using `+=`,
 // we're adding the cats dependency to the set of dependencies that sbt will go
 // and fetch when it starts up.
