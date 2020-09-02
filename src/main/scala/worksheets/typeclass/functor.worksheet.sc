@@ -97,3 +97,34 @@ implicit def boxPrintable[A](implicit p: Printable[A]): Printable[Box[A]] =
 
 format(Box("hello world"))
 format(Box(true))
+
+trait Codec[A] { self =>
+  def encode(value: A): String
+  def decode(value: String): A
+  def imap[B](dec: A => B, enc: B => A): Codec[B] =
+    new Codec[B] {
+      override def encode(value: B): String = self.encode(enc(value))
+      override def decode(value: String): B = dec(self.decode(value))
+    }
+}
+def encode[A](a: A)(implicit codec: Codec[A]): String = codec.encode(a)
+
+def decode[A](a: String)(implicit codec: Codec[A]): A = codec.decode(a)
+
+implicit val stringCodec: Codec[String] = new Codec[String] {
+  def encode(value: String): String = value
+  def decode(value: String): String = value
+}
+
+implicit val intCodec: Codec[Int] = stringCodec.imap(_.toInt, _.toString)
+implicit val booleanCodec: Codec[Boolean] =
+  stringCodec.imap(_.toBoolean, _.toString)
+
+implicit def boxCodec[A](implicit c: Codec[A]): Codec[Box[A]] =
+  c.imap(Box.apply, _.value)
+encode(123)
+encode(true)
+encode(Box(123))
+encode(Box(true))
+decode[Boolean]("true")
+decode[Box[Boolean]]("false")
