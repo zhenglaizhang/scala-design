@@ -22,10 +22,21 @@ def strDivideBy2(a: String, b: String): Option[Int] =
 strDivideBy("4", "2")
 strDivideBy("4", "0")
 
-trait Monad[F[_]] {
-  def pure[A](a: A): F[A]
+object hidden {
+  trait Monad[F[_]] {
+    def pure[A](a: A): F[A]
 
-  def flatMap[A, B](fa: F[A])(f: A => F[B]): F[B]
+    def flatMap[A, B](fa: F[A])(f: A => F[B]): F[B]
 
-  def map[A, B](fa: F[A])(f: A => B): F[B] = flatMap(fa)(f.andThen(pure))
+    def map[A, B](fa: F[A])(f: A => B): F[B] = flatMap(fa)(f.andThen(pure))
+  }
 }
+
+import cats.Monad
+import cats.instances.option._
+import cats.instances.list._
+
+val opt1 = Monad[Option].pure(3)
+val opt2 = Monad[Option].flatMap(opt1)(a => Some(a + 2))
+val list1 = Monad[List].pure(3)
+val list2 = Monad[List].flatMap(list1)(a => List(a, a * 10))
