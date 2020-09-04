@@ -40,3 +40,15 @@ val opt1 = Monad[Option].pure(3)
 val opt2 = Monad[Option].flatMap(opt1)(a => Some(a + 2))
 val list1 = Monad[List].pure(3)
 val list2 = Monad[List].flatMap(list1)(a => List(a, a * 10))
+
+import cats.syntax.applicative._
+1.pure[Option]
+1.pure[List]
+
+import cats.syntax.flatMap._
+import cats.syntax.functor._
+def sumSquare[F[_]: Monad](a: F[Int], b: F[Int]): F[Int] =
+  a.flatMap(x => b.map(y => x * x + y * y))
+
+sumSquare(Option(1), Option(2))
+sumSquare(Option(1), Option.empty[Int])
