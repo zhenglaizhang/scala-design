@@ -284,3 +284,26 @@ val passwords = Map(
 val db = Db(users, passwords)
 checkLogin(1, "pass").run(db)
 checkLogin(2, "adf").run(db)
+
+import cats.data.State
+val sa = State[Int, String] { state => (state, s"The state is $state") }
+val (state, res) = sa.run(10).value
+sa.runS(10).value
+sa.runA(10).value
+
+val step1 = State[Int, String] { num =>
+  val ans = num + 1
+  (ans, s"Result of step1: $ans")
+}
+
+val step2 = State[Int, String] { num =>
+  val ans = num * 2
+  (ans, s"Result of step2: $ans")
+}
+
+val both = for {
+  a <- step1
+  b <- step2
+} yield (a, b)
+
+val (ss, rr) = both.run(10).value
