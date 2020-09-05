@@ -148,3 +148,55 @@ def handleError(error: LoginError): Unit =
     case UserNotFound(username) => println(s"user not found: $username")
     case UnexptectedError       => println("unexpected")
   }
+
+val eager = {
+  println("eager and memorized")
+  math.random()
+}
+
+def lazy1 = {
+  println("lazy and not memorized")
+  math.random()
+}
+
+eager
+eager
+lazy1
+lazy1
+
+lazy val callByNeed = {
+  println("computing z")
+  math.random()
+}
+
+callByNeed
+callByNeed
+
+import cats.Eval
+val now = Eval.now(math.random())
+val always = Eval.always(math.random())
+val later = Eval.later(math.random())
+
+now.value
+now.value
+always.value
+always.value
+later.value
+later.value
+
+val m = Eval
+  .always { println("step1"); "hello" }
+  .map { str => println("step2"); s"$str world" }
+  .memoize
+  .map { str => println("step3"); str }
+m.value
+m.value
+
+def factorial(n: BigInt): Eval[BigInt] =
+  if (n == 1) {
+    Eval.now(n)
+  } else {
+    Eval.defer(factorial(n - 1)).map(_ * n)
+  }
+
+factorial(100000).value
