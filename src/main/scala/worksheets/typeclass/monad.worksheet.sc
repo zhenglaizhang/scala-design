@@ -52,3 +52,27 @@ def sumSquare[F[_]: Monad](a: F[Int], b: F[Int]): F[Int] =
 
 sumSquare(Option(1), Option(2))
 sumSquare(Option(1), Option.empty[Int])
+
+object hiddenid {
+  type Id1[A] = A
+}
+
+import cats.Id
+sumSquare(3: Id[Int], 4: Id[Int])
+
+"Dave": Id[String]
+
+123: Id[Int]
+
+List(1, 2, 3): Id[List[Int]]
+
+val a = Monad[Id].pure(3)
+val b = Monad[Id].flatMap(a)(_ + 1)
+import cats.syntax.functor._
+import cats.syntax.flatMap._
+for {
+  x <- a
+  y <- b
+} yield x + y
+
+val e1: Either[String, Int] = Right(10)
