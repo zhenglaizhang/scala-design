@@ -76,3 +76,49 @@ for {
 } yield x + y
 
 val e1: Either[String, Int] = Right(10)
+val e2: Either[String, Int] = Right(11)
+for {
+  a <- e1.right
+  b <- e2.right
+} yield a + b
+
+for {
+  a <- e1
+  b <- e2
+} yield a + b
+
+import cats.syntax.either._
+// smart constructor
+val e3 = 3.asRight[String]
+val e4 = 4.asRight[String]
+for {
+  a <- e3
+  b <- e4
+} yield a + b
+
+def countPositive(nums: List[Int]) =
+  nums.foldLeft(0.asRight[String]) { (acc, num) =>
+    if (num > 0) {
+      acc.map(_ + 1)
+    } else {
+      Left("Negative. Stopping!")
+    }
+  }
+
+countPositive(List(1, 2, 3))
+countPositive(List(1, 2, 3, -1, -2))
+
+Either.catchOnly[NumberFormatException]("foo".toInt)
+Either.catchNonFatal(sys.error("badness"))
+Either.fromTry(Try("foo".toInt))
+Either.fromOption[String, Int](None, "Badness")
+
+import cats.syntax.either._
+"error".asLeft[Int].getOrElse(0)
+"error".asLeft[Int].orElse(2.asRight[String])
+
+-1.asRight[String].ensure("Must be non-negative")(_ > 0)
+
+"foo".asLeft[Int].leftMap(_.reverse)
+6.asRight[String].bimap(_.reverse, _ * 7)
+123.asRight[String].swap
