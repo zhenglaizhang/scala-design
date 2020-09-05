@@ -122,3 +122,29 @@ import cats.syntax.either._
 "foo".asLeft[Int].leftMap(_.reverse)
 6.asRight[String].bimap(_.reverse, _ * 7)
 123.asRight[String].swap
+
+// fail fast error handling
+for {
+  a <- 1.asRight[String]
+  b <- 0.asRight[String]
+  c <-
+    if (b == 0) "DIV0".asLeft[Int]
+    else (a / b).asRight[String]
+} yield c * 100
+
+type Result[A] = Either[Throwable, A]
+
+object wrapper {
+  sealed trait LoginError extends Product with Serializable
+  final case class UserNotFound(username: String) extends LoginError
+  case object UnexptectedError extends LoginError
+}
+import wrapper._
+case class User(username: String, password: String)
+type LoginResult = Either[LoginError, User]
+
+def handleError(error: LoginError): Unit =
+  error match {
+    case UserNotFound(username) => println(s"user not found: $username")
+    case UnexptectedError       => println("unexpected")
+  }
