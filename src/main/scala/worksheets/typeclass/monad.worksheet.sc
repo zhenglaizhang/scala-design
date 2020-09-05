@@ -199,4 +199,29 @@ def factorial(n: BigInt): Eval[BigInt] =
     Eval.defer(factorial(n - 1)).map(_ * n)
   }
 
-factorial(100000).value
+// factorial(100000).value
+
+import cats.data.Writer
+// type Writer[L, V] = WriterT[Id, L, V]
+import cats.data.WriterT
+import cats.Id
+import cats.instances.vector._ // for Monoid
+val w: WriterT[Id, Vector[String], Int] = Writer(
+  Vector(
+    "the best",
+    "the worst"
+  ),
+  1895
+)
+import cats.syntax.applicative._
+type Logged[A] = Writer[Vector[String], A]
+123.pure[Logged]
+
+import cats.syntax.writer._
+Vector("no", "result", "only", "unit").tell
+
+val w1 = 123.writer(Vector("msg1", "msg2", "msg3"))
+w1.value
+w1.written
+
+val (log, result) = w1.run
