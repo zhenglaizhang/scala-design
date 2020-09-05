@@ -236,3 +236,16 @@ writer1.run
 // transform the log
 writer1.mapWritten(_.map(_.toUpperCase)).run
 
+import cats.data.Reader
+final case class Cat(name: String, food: String)
+val catName: Reader[Cat, String] = Reader(cat => cat.name)
+catName.run(Cat("name", "food"))
+val greet: Reader[Cat, String] = catName.map(name => s"Hello $name")
+greet.run(Cat("name", "food"))
+val feed: Reader[Cat, String] = Reader(cat => s"Hive a nice ${cat.food}")
+val greetAndFeed: Reader[Cat, String] = for {
+  g <- greet
+  f <- feed
+} yield s"$g, $f"
+
+greetAndFeed(Cat("wow", "meow"))
