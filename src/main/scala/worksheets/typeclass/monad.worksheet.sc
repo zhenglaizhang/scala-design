@@ -225,3 +225,14 @@ w1.value
 w1.written
 
 val (log, result) = w1.run
+
+val writer1 = for {
+  a <- 10.pure[Logged]
+  _ <- Vector("a", "b", "c").tell
+  b <- 32.writer(Vector("x", "y", "z"))
+} yield a + b
+
+writer1.run
+// transform the log
+writer1.mapWritten(_.map(_.toUpperCase)).run
+
