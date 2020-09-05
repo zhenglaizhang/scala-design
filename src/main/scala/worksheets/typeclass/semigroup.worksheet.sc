@@ -29,7 +29,12 @@ Semigroupal[List].product(List(1, 2), List(3, 4))
 // fail fast instead oof accumulating error handling
 import cats.instances.either._
 type ErrorOr[A] = Either[Vector[String], A]
-Semigroupal[ErrorOr].product(
-  Left(Vector("error 1")),
-  Left(Vector("error 2"))
-)
+val e1: ErrorOr[Int] = Left(Vector("error 1"))
+val e2: ErrorOr[Int] = Left(Vector("error 2"))
+Semigroupal[ErrorOr].product(e1, e1)
+
+import cats.syntax.apply._
+(e1, e2).tupled
+
+// import cats.syntax.parallel._
+// (e1, e2).parTupled
