@@ -49,3 +49,25 @@ Await.result(getUptimes(List("github.com", "baidu.com")), 1.second)
 
 val f = Future.sequence(List(Future(1), Future(2)))
 Await.result(f, 1.second)
+
+import cats.Monoid
+import cats.syntax.semigroup._
+// def foldMap[A, B: Monoid](xs: Vector[A])(func: A => B): B =
+//   xs.map(func).foldLeft(Monoid[B].empty)(_ |+| _)
+def foldMap[A, B: Monoid](xs: Vector[A])(func: A => B): B =
+  xs.foldLeft(Monoid[B].empty)(_ |+| func(_))
+
+foldMap(Vector(1, 2, 3))(_.toString + "!")
+
+def parallelFoldMap[A, B: Monoid](xs: Vector[A])(func: A => B): Future[B] = {
+  val numCores = Runtime.getRuntime().availableProcessors()
+  val groupSize = (1.0 * xs.size / numCores).ceil.toInt
+  val batches = xs.grouped(groupSize)
+  val futures = batches.map { batch => Future(foldMap(batch)(func)) }
+  Future.sequence(futures).map { ys =>
+    ys.foldLeft(Monoid[B].empty)(Monoid.combine)
+  }
+}
+
+val r = parallelFoldMap(Vector(1, 2, 3))(x => x * x)
+Await.result(r, 1.second)
