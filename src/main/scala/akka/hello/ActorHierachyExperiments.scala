@@ -5,6 +5,8 @@ import akka.actor.typed.Behavior
 import akka.actor.typed.scaladsl.AbstractBehavior
 import akka.actor.typed.scaladsl.ActorContext
 import akka.actor.typed.scaladsl.Behaviors
+import akka.actor.typed.Signal
+import akka.actor.typed.PostStop
 
 object PrintMyActorRefActor {
   def apply(): Behavior[String] =
@@ -21,6 +23,12 @@ class PrintMyActorRefActor(context: ActorContext[String])
         println(s"Second: $secondRef")
         this
     }
+  override def onSignal: PartialFunction[Signal, Behavior[String]] = {
+    case PostStop =>
+      println("poststopping")
+      // Behaviors.unhandled
+      this
+  }
 }
 
 object Main {
