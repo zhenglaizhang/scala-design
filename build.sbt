@@ -12,7 +12,7 @@ scalaVersion := "2.13.3"
 
 // It's possible to define many kinds of settings, such as:
 
-eame := "scala-design"
+name := "scala-design"
 organization := "net.zhenglai.scala"
 version := "0.1"
 
