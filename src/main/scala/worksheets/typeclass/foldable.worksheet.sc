@@ -36,3 +36,16 @@ List(1, 2).combineAll
 List(1, 2).foldMap(_.toString)
 
 def sum[F[_]: Foldable](xs: F[Int]): Int = xs.foldLeft(0)(_ + _)
+
+import scala.concurrent._
+import scala.concurrent.duration._
+import scala.concurrent.ExecutionContext.Implicits.global
+def getUptime(hostname: String): Future[Int] = Future(hostname.length * 60)
+
+def getUptimes(xs: List[String]): Future[List[Int]] =
+  Future.traverse(xs)(getUptime)
+
+Await.result(getUptimes(List("github.com", "baidu.com")), 1.second)
+
+val f = Future.sequence(List(Future(1), Future(2)))
+Await.result(f, 1.second)
