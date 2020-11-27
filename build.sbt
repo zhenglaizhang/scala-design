@@ -20,9 +20,9 @@ version := "0.1"
 // mostly only necessary if you intend to publish your library's binaries on a
 // place like Sonatype or Bintray.
 
-lazy val akkaVersion = "2.6.8"
+lazy val akkaVersion = "2.6.10"
 libraryDependencies ++= Seq(
-  "org.typelevel" %% "cats-core" % "2.1.0",
+  "org.typelevel" %% "cats-core" % "2.2.0",
   "com.typesafe.akka" %% "akka-actor-typed" % akkaVersion,
   "com.typesafe.akka" %% "akka-remote" % akkaVersion,
   "com.typesafe.akka" %% "akka-cluster-typed" % akkaVersion,
