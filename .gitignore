@@ -5,3 +5,4 @@ target
 .bloop
 .ammonite
 metals.sbt
+.bsp
