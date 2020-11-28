@@ -97,7 +97,7 @@ object DeviceGroup {
   ) extends Command
 }
 
-class DeviceGroup(ctx: ActorContext[DeviceGroup.Command], groupId: String)
+abstract class DeviceGroup(ctx: ActorContext[DeviceGroup.Command], groupId: String)
     extends AbstractBehavior[DeviceGroup.Command](ctx) {
   import DeviceGroup._
 }
