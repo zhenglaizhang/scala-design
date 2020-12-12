@@ -66,12 +66,14 @@ def sayHelloM(): Unit = println("hello")
 exec(sayHelloF)
 exec(sayHelloM, 2)
 
-
 def sum(a: Int, b: Int, c: Int) = a + b + c
 val addTo3 = sum(1, 2, _)
 addTo3(3)
 
-
 def wrap(prefix: String, html: String, suffix: String) = s"$prefix$html$suffix"
 val wrapWithDiv = wrap("<div>", _: String, "</div>")
 wrapWithDiv("wow")
+
+def saySth(prefix: String): String => String = (s: String) => s"$prefix $s"
+val sayHello = saySth("Hello")
+sayHello("wow")
