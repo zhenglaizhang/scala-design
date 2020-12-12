@@ -66,6 +66,7 @@ class StoreEmployee extends Employee
 // trait extends class
 trait DeliversFood extends StoreEmployee
 
+// super will always refer to the last trait that is mixed in. This is referred to as a “back to front” linearization order.
 class DeliveryPerson extends StoreEmployee with DeliversFood
 // Compiler error
 // class Receptionist extends CorporateEmployee with DeliversFood
@@ -123,3 +124,41 @@ trait Pair[A, B] {
   def getKey: A
   def getValue: B
 }
+
+
+trait Hello { def g = "hello" }
+trait Hi { def g = "hi" }
+trait Yo { def g = "Yo" }
+class Greeter extends Hello with Hi with Yo {
+  override def g = super.g
+  def gHello = super[Hello].g
+  def gHi = super[Hi].g
+  def gYo = super[Yo].g
+}
+
+new Greeter().g
+new Greeter().gHello
+
+
+
+
+// Use trait to create modules
+trait AddService {
+  def add(a: Int, b: Int) = a + b
+}
+
+trait MultipleService {
+  def multiply(a: Int, b: Int) = a * b
+}
+
+object AddService extends AddService
+
+// import AddService._
+// println(add(1, 1))
+
+object MathService 
+  extends AddService 
+  with MultipleService
+import MathService._
+add(1, 2)
+multiply(3, 4)
