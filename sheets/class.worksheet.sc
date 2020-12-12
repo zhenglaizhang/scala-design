@@ -31,3 +31,25 @@ A.get().value
 // scala.Predef
 Predef.println(12)
 Console println 12
+
+
+sealed trait Animal {
+  def speak(): Unit
+}
+
+private class Dog extends Animal {
+  override def speak(): Unit = {}
+}
+
+private class Cat extends Animal {
+  override def speak(): Unit = {}
+}
+
+object Animal {
+  def apply(s: String): Animal = if (s == "dog") new Dog else new Cat
+}
+
+Animal("dog")
+
+// compiler error
+// new Dog
