@@ -109,7 +109,39 @@ List.range(1, 10).collect {
   case i if i < 5 => i
 }
 
-
 List(Some(1), None, Some(2)) collect {
   case Some(i) => i
 }
+
+trait Animal
+trait AnimalWithLegs
+trait AnimalWithTail
+
+case class Dog(name: String)
+    extends Animal
+    with AnimalWithLegs
+    with AnimalWithTail
+
+trait TailService[AnimalWithTail] {
+  def wagTail(a: AnimalWithTail) = println(s"$a is wagging tail")
+  def stopTail(a: AnimalWithTail) = println(s"$a is topping wagging")
+}
+
+trait AnimalWithLegsServices[AnimalWithLegs] {
+  def walk(a: AnimalWithLegs) = println(s"$a is walking")
+  def run(a: AnimalWithLegs) = println(s"$a is running")
+  def stop(a: AnimalWithLegs) = println(s"$a is stopped")
+}
+
+trait DogServices[Dog] { def bark(d: Dog) = println(s"$d says ‘woof’") }
+
+object DogServices
+    extends DogServices[Dog]
+    with AnimalWithLegsServices[Dog]
+    with TailService[Dog]
+
+val dog = new Dog("Dog")
+import DogServices._
+walk(dog)
+wagTail(dog)
+stopTail(dog)
