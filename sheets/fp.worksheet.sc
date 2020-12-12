@@ -55,3 +55,23 @@ val c2 = scala.math.cos(_)
 def sub(x: Int, y: Int) = x - y
 val subF = sub(_, _)
 val subF2 = sub _
+
+val square = scala.math.pow(_, 2)
+square(2)
+square(5)
+
+def exec(f: () => Unit, times: Int = 1) = { for (i <- 1 to times) f() }
+val sayHelloF = () => println("hello")
+def sayHelloM(): Unit = println("hello")
+exec(sayHelloF)
+exec(sayHelloM, 2)
+
+
+def sum(a: Int, b: Int, c: Int) = a + b + c
+val addTo3 = sum(1, 2, _)
+addTo3(3)
+
+
+def wrap(prefix: String, html: String, suffix: String) = s"$prefix$html$suffix"
+val wrapWithDiv = wrap("<div>", _: String, "</div>")
+wrapWithDiv("wow")
