@@ -77,3 +77,39 @@ wrapWithDiv("wow")
 def saySth(prefix: String): String => String = (s: String) => s"$prefix $s"
 val sayHello = saySth("Hello")
 sayHello("wow")
+
+val divide = new PartialFunction[Int, Int] {
+  def apply(x: Int) = 10 / x
+  def isDefinedAt(x: Int) = x != 0
+}
+
+divide.isDefinedAt(0)
+
+val divide2: PartialFunction[Int, Int] = {
+  case d if d != 0 => 42 / d
+}
+
+divide2.isDefinedAt(0)
+
+trait PartialFunction2[-A, +B] extends (A => B)
+
+val handle1: PartialFunction[Int, Int] = {
+  case d if d == 1 => 1
+}
+
+val handle2: PartialFunction[Int, Int] = {
+  case d if d == 2 => 2
+}
+
+val handle12 = handle1 orElse handle2
+handle12(1)
+handle12(2)
+
+List.range(1, 10).collect {
+  case i if i < 5 => i
+}
+
+
+List(Some(1), None, Some(2)) collect {
+  case Some(i) => i
+}
