@@ -32,7 +32,6 @@ A.get().value
 Predef.println(12)
 Console println 12
 
-
 sealed trait Animal {
   def speak(): Unit
 }
@@ -67,6 +66,27 @@ Person()
 Person("meow")
 
 // a class with private constructor
-class PrivatePerson private(name: String)
+class PrivatePerson private (name: String)
 
+class Meow(private var _name: String) {
+  // private field
+  // any Meow instance can access
+  private val age: Int = 0;
 
+  // object-private field
+  // only current instance can access
+  private[this] val wow: Int = 0;
+
+  // name()
+  def name = _name
+
+  // name_$eq()
+  def name_=(name: String) { _name = name }
+}
+
+val x = new Meow("wow")
+x.name
+x.name_=("mm")
+x.name
+x.name = "wow"
+x.name
