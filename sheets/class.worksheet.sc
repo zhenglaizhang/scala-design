@@ -53,3 +53,20 @@ Animal("dog")
 
 // compiler error
 // new Dog
+
+case class Person(val name: String, val age: Int)
+
+// add more auxiliary factory methods
+object Person {
+  def apply() = new Person("<no name>", 0)
+  def apply(name: String) = new Person(name, 0)
+}
+
+Person("test", 1)
+Person()
+Person("meow")
+
+// a class with private constructor
+class PrivatePerson private(name: String)
+
+
