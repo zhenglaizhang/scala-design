@@ -90,3 +90,24 @@ x.name_=("mm")
 x.name
 x.name = "wow"
 x.name
+
+
+abstract class AP(var name: String, var age: Int) 
+final class P(var name: String, var age: Int)
+case class ImmutablePerson(name: String, age: Int)
+
+def m(seq: Seq[Int]): Unit = println(s"Seq[Int]: $seq")
+// type after erasure: def m(seq: Seq)...
+// def m(seq: Seq[String]): Unit = println(s"Seq[String]: $seq")
+
+// procedure syntax
+// inferred Unit 
+def foo() { "a" }
+
+// function syntax
+def bar() = { "a" }
+
+foo()
+bar()
+
+
