@@ -13,7 +13,7 @@ object List {
   def product(ints: List[Int]): Int =
     ints match {
       case Nil              => 1
-      case Cons(0, tail)    => 0
+      case Cons(0, _)    => 0
       case Cons(head, tail) => head * product(tail)
     }
 
