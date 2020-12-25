@@ -7,7 +7,7 @@ def sumDivideAndConquer(ints: IndexedSeq[Int]): Int = {
     ints.headOption.getOrElse(0)
   } else {
     val (l, r) = ints.splitAt(ints.length / 2)
-    sum(l) + sum(r)
+    sumDivideAndConquer(l) + sumDivideAndConquer(r)
   }
 }
 
@@ -17,6 +17,8 @@ class Par[A] {}
 
 object Par {
   def unit[A](a: A): Par[A] = ???
+  // a given Par should be run in a separate logic thread
+  def fork[A](a: => Par[A]): Par[A] = ???
   def map2[A, B](a: Par[A], b: Par[A])(f: (A, A) => B) = ???
 }
 
