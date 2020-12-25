@@ -22,7 +22,13 @@ object Module {
   }
   val lessThan2: (Int, Int) => Boolean = (x: Int, y: Int) => x < y
 
-  def isSorted[A](xs: IndexedSeq[A], ordered: (A, A) => Boolean): Boolean = ???
+  def isSorted[A](xs: IndexedSeq[A], ordered: (A, A) => Boolean): Boolean = {
+    def go(n: Int): Boolean = {
+      if (n >= xs.length - 1) true
+      else ordered(xs(n), xs(n + 1)) && go(n + 1)
+    }
+    xs.length > 1 && go(0)
+  }
 
   // 0 1 1 2 3 5 8 ...
   // TODO: use local tail-recursive function
@@ -35,5 +41,6 @@ object Module {
     println(format("abs", -2, abs))
     println(format("factorial", 4, factorial))
     println(format("fabonacci", 7, fabonacci))
+    println(isSorted(Vector(1, 2, 5, 4), (_: Int) < (_: Int)))
   }
 }
