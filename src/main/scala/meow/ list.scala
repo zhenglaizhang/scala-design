@@ -101,4 +101,10 @@ object ListApp extends App {
   val xs2 = List.foldRight(List(1, 2, 3), List(4, 5, 6))(Cons(_, _))
   println(xs2)
   println(List.length((xs2)))
+
+  // tuple is also ADT
+  val m = ("Bob", 2) match {
+    case (a, b) => b
+  }
+  println(m)
 }
