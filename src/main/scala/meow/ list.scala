@@ -17,11 +17,11 @@ object List {
 
   def zipWith[A, B](xs: List[A], ys: List[B])(f: (A, B) => B): List[B] = ???
 
-  def filter[A](xs: List[A])(f: A => Boolean): List[B] = ???
+  def filter[A](xs: List[A])(f: A => Boolean): List[A] = ???
 
   def foldLeft[A, B](xs: List[A], z: B)(f: (B, A) => B): B = ???
 
-  def hasSubsequence[A](sup: list[A], sub: List[A]): Boolean = ???
+  def hasSubsequence[A](sup: List[A], sub: List[A]): Boolean = ???
 
   // reverse
 
