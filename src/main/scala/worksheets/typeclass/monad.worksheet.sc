@@ -1,5 +1,4 @@
 import scala.util.Try
-import scala.util.Try
 
 def parseInt(str: String): Option[Int] = Try(str.toInt).toOption
 
@@ -22,11 +21,33 @@ def strDivideBy2(a: String, b: String): Option[Int] =
 strDivideBy("4", "2")
 strDivideBy("4", "0")
 
+import scala.concurrent.Future
+import scala.concurrent.Await
+import scala.concurrent.duration._
+import scala.concurrent.ExecutionContext.Implicits.global
+def f1: Future[Int] = Future.successful(1)
+def f2: Future[Int] = Future { 2 }
+def f12: Future[Int] =
+  for {
+    f11 <- f1
+    f22 <- f2
+  } yield f11 + f22
+
+Await.result(f12, 1.second)
+
 object hidden {
   trait Monad[F[_]] {
     def pure[A](a: A): F[A]
 
+    def `return`[A](a: A): F[A] = pure(a)
+
+    def point[A](a: A): F[A] = pure(a)
+
     def flatMap[A, B](fa: F[A])(f: A => F[B]): F[B]
+
+    def bind[A, B](fa: F[A])(f: A => F[B]): F[B] = flatMap(fa)(f)
+
+    def >>=[A, B](fa: F[A])(f: A => F[B]): F[B] = flatMap(fa)(f)
 
     def map[A, B](fa: F[A])(f: A => B): F[B] = flatMap(fa)(f.andThen(pure))
   }
@@ -81,6 +102,7 @@ for {
   a <- e1.right
   b <- e2.right
 } yield a + b
+
 
 for {
   a <- e1
