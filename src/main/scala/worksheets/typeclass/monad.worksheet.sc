@@ -259,6 +259,18 @@ writer1.run
 // transform the log
 writer1.mapWritten(_.map(_.toUpperCase)).run
 
+
+def run[A](a: => A) = {
+  println(a)
+  println("test")
+  println(a)
+}
+
+run {
+  println("wow")
+  12
+}
+
 import cats.data.Reader
 final case class Cat(name: String, food: String)
 val catName: Reader[Cat, String] = Reader(cat => cat.name)
