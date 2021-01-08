@@ -252,7 +252,8 @@ val writer1 = for {
   a <- 10.pure[Logged]
   _ <- Vector("a", "b", "c").tell
   b <- 32.writer(Vector("x", "y", "z"))
-} yield a + b
+  c <- 10.writer(Vector("e", "f", "g"))
+} yield a + b + c
 
 writer1.run
 // transform the log
