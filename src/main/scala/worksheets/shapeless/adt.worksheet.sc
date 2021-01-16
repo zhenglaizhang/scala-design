@@ -24,11 +24,9 @@ def area2(s: Shap): Double =
 
 // Shap is a more generic encoding than Shape
 
-
-// tuple to encode product type? 
+// tuple to encode product type?
 //  tupleN is of different type
-//  no tuple0, Unit? 
-
+//  no tuple0, Unit?
 
 import shapeless.{HList, ::, HNil}
 val product: String :: Int :: Boolean :: HNil = "Sunday" :: 1 :: false :: HNil
@@ -42,7 +40,6 @@ product.tail.tail
 // prepend an element
 32L :: product
 
-
 import shapeless.Generic
 case class IceCream(name: String, numCherries: Int, inCone: Boolean)
 val iceCreamGen = Generic[IceCream]
@@ -52,7 +49,6 @@ iceCreamGen.from(repr)
 
 case class Employee(name: String, number: Int, manager: Boolean)
 val e = Generic[Employee].from(repr)
-
 
 import shapeless.{Coproduct, :+:, CNil, Inl, Inr}
 case class Red()
@@ -65,6 +61,39 @@ val gen = Generic[Shape]
 gen.to(Rectangle(3, 4))
 gen.to(Circle(1.0))
 
-
 // HList for product types
 // Coproducts for coproduct types
+
+trait CsvEncoder[A] {
+  def encode(v: A): List[String]
+}
+
+object CsvEncoder {
+  def enc[A: CsvEncoder](v: A): List[String] =
+    implicitly[CsvEncoder[A]].encode(v)
+
+}
+
+object CsvEncoderInstances {
+  implicit val employeeEncoder: CsvEncoder[Employee] =
+    new CsvEncoder[Employee] {
+      def encode(v: Employee): List[String] =
+        List(
+          e.name,
+          e.number.toString,
+          if (e.manager) "yes" else "no"
+        )
+    }
+
+}
+
+import CsvEncoderInstances._
+CsvEncoder.enc(e)
+
+object CsvEncoderSyntax {
+  implicit class CsvEncoderOps[A](v: A) {
+    def toCsv(implicit e: CsvEncoder[A]): List[String] = e.encode(v)
+  }
+}
+import CsvEncoderSyntax._
+e.toCsv
