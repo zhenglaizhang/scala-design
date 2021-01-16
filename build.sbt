@@ -20,8 +20,14 @@ version := "0.1"
 // mostly only necessary if you intend to publish your library's binaries on a
 // place like Sonatype or Bintray.
 
+resolvers ++= Seq(
+  Resolver.sonatypeRepo("releases"),
+  Resolver.sonatypeRepo("snapshots")
+)
+
 lazy val akkaVersion = "2.6.10"
 libraryDependencies ++= Seq(
+  "com.chuusai" %% "shapeless" % "2.3.3",
   "org.typelevel" %% "cats-core" % "2.2.0",
   "com.typesafe.akka" %% "akka-actor-typed" % akkaVersion,
   "com.typesafe.akka" %% "akka-remote" % akkaVersion,
