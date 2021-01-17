@@ -69,6 +69,19 @@ trait CsvEncoder[A] {
 }
 
 object CsvEncoder {
+  // summoner method
+  def apply[A: CsvEncoder](): CsvEncoder[A] = implicitly[CsvEncoder[A]]
+
+  def the[A: CsvEncoder](): CsvEncoder[A] = this.apply();
+
+  // smart constructor
+  def instance[A](f: A => List[String]): CsvEncoder[A] =
+    new CsvEncoder[A] {
+      def encode(v: A): List[String] = f(v)
+    }
+
+  def pure[A](f: A => List[String]): CsvEncoder[A] = this.instance(f)
+
   def enc[A: CsvEncoder](v: A): List[String] =
     implicitly[CsvEncoder[A]].encode(v)
 
@@ -85,6 +98,16 @@ object CsvEncoderInstances {
         )
     }
 
+  implicit val booleanEncoder: CsvEncoder[Boolean] =
+    CsvEncoder.instance(b => if (b) List("yes") else List("no"))
+
+  implicit val stringEncoder: CsvEncoder[String] =
+    CsvEncoder.instance(s => List(s))
+
+  implicit val intEncoder: CsvEncoder[Int] =
+    CsvEncoder.instance(i => List(i.toString))
+
+  implicit val hnilEncoder: CsvEncoder[HNil] = CsvEncoder.instance(a => Nil)
 }
 
 import CsvEncoderInstances._
