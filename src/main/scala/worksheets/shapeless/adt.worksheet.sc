@@ -242,3 +242,40 @@ CsvEncoder[Double]
 //import scala.reflect
 // todo ??? reflect.reify missing
 
+// gen.Repr is a dependent type
+def getRepr[A](a: A)(implicit gen: Generic[A]): gen.Repr = gen.to(a)
+
+getRepr(People("w", 12, true))
+
+import shapeless.ops.hlist.Last
+
+val last1 = Last[String :: Double :: HNil]
+last1("a" :: 2.0 :: HNil)
+//last1("a" :: HNil)
+//type mismatch;
+//found   : String :: shapeless.HNil
+//required: String :: Double :: shapeless.HNil
+
+trait Second[L <: HList] {
+  type Out
+  def apply(v: L): Out
+}
+
+object Second {
+  type Aux[L <: HList, O] = Second[L] { type Out = O }
+  def apply[L <: HList](implicit inst: Second[L]): Aux[L, inst.Out] = inst
+}
+
+import Second._
+
+implicit def hlistSecond[A, B, Rest <: HList]: Aux[A :: B :: Rest, B] =
+  new Second[A :: B :: Rest] {
+    override type Out = B
+    override def apply(v: A :: B :: Rest): Out = v.tail.head
+  }
+
+val second1 = Second[Double :: Int :: String :: HNil]
+second1(12.0 :: 12 :: "s" :: HNil)
+
+//Second[Boolean :: HNil]
+//could not find implicit value for parameter inst: Second[Boolean :: shapeless.HNil]
