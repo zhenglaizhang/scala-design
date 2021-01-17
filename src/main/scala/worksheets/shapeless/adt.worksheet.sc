@@ -28,7 +28,7 @@ def area2(s: Shap): Double =
 //  tupleN is of different type
 //  no tuple0, Unit?
 
-import shapeless.{::, Coproduct, HList, HNil}
+import shapeless.{::, Coproduct, HList, HNil, Lazy}
 
 import java.util.Date
 val product: String :: Int :: Boolean :: HNil = "Sunday" :: 1 :: false :: HNil
@@ -120,21 +120,22 @@ object CsvEncoderInstances {
 //    }
 //  }
   implicit def hlistEncoder[H, T <: HList](implicit
-      he: CsvEncoder[H],
+      he: Lazy[CsvEncoder[H]],
       te: CsvEncoder[T]
   ): CsvEncoder[H :: T] =
     CsvEncoder.instance {
-      case (h: H) :: (t: T) => he.encode(h) ++ te.encode(t)
+      case (h: H) :: (t: T) => he.value.encode(h) ++ te.encode(t)
     }
 
   implicit val cnilEncoder: CsvEncoder[CNil] =
     CsvEncoder.instance(cnil => throw new Exception("inconceivable"))
   implicit def coproductEncoder[H, T <: Coproduct](implicit
-      he: CsvEncoder[H],
+      // todo: ???
+      he: Lazy[CsvEncoder[H]],
       te: CsvEncoder[T]
   ): CsvEncoder[H :+: T] =
     CsvEncoder.instance {
-      case Inl(l) => he.encode(l)
+      case Inl(l) => he.value.encode(l)
       case Inr(r) => te.encode(r)
     }
 }
@@ -191,9 +192,9 @@ implicit def genericEncoder[A, R](implicit
 //    gen: Generic[A] { type Repr = R },
     // todo: ???
     gen: Generic.Aux[A, R],
-    enc: CsvEncoder[R]
+    enc: Lazy[CsvEncoder[R]]
 ): CsvEncoder[A] =
-  CsvEncoder.instance(ic => enc.encode(gen.to(ic)))
+  CsvEncoder.instance(ic => enc.value.encode(gen.to(ic)))
 
 case class People(name: String, age: Int, male: Boolean)
 
@@ -213,3 +214,14 @@ def writeCsv[A: CsvEncoder](xs: List[A]): String =
   xs.map(x => implicitly[CsvEncoder[A]].encode(x).mkString(",")).mkString("\n")
 
 writeCsv(shapes)
+
+case class Bar(baz: Int, d: Double)
+case class Foo(bar: Bar)
+Foo(Bar(1, 1.0)).toCsv
+
+// recursive type
+sealed trait Tree[A]
+case class Branch[A](left: Tree[A], right: Tree[A]) extends Tree[A]
+case class Leaf[A](v: A) extends Tree[A]
+CsvEncoder[Tree[Int]]
+// diverging implicit expansion for type CsvEncoder[Tree[Int]]
