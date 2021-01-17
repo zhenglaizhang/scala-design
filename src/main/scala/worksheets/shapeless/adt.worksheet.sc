@@ -28,7 +28,9 @@ def area2(s: Shap): Double =
 //  tupleN is of different type
 //  no tuple0, Unit?
 
-import shapeless.{::, HList, HNil}
+import shapeless.{::, Coproduct, HList, HNil}
+
+import java.util.Date
 val product: String :: Int :: Boolean :: HNil = "Sunday" :: 1 :: false :: HNil
 product.head
 product.tail
@@ -124,6 +126,17 @@ object CsvEncoderInstances {
     CsvEncoder.instance {
       case (h: H) :: (t: T) => he.encode(h) ++ te.encode(t)
     }
+
+  implicit val cnilEncoder: CsvEncoder[CNil] =
+    CsvEncoder.instance(cnil => throw new Exception("inconceivable"))
+  implicit def coproductEncoder[H, T <: Coproduct](implicit
+      he: CsvEncoder[H],
+      te: CsvEncoder[T]
+  ): CsvEncoder[H :+: T] =
+    CsvEncoder.instance {
+      case Inl(l) => he.encode(l)
+      case Inr(r) => te.encode(r)
+    }
 }
 
 import CsvEncoderInstances._
@@ -186,3 +199,17 @@ case class People(name: String, age: Int, male: Boolean)
 
 IceCream("a", 1, false).toCsv
 People("p", 12, false).toCsv
+
+case class Wow(f: Double, b: Boolean)
+Wow(12.0, true).toCsv
+
+case class Booking(room: String, date: Date)
+// Booking("adfa", new Date()).toCsv
+// could not find implicit value for parameter e: CsvEncoder[Booking]
+
+val shapes: List[Shape] = List(Rectangle(1, 1), Circle(1))
+
+def writeCsv[A: CsvEncoder](xs: List[A]): String =
+  xs.map(x => implicitly[CsvEncoder[A]].encode(x).mkString(",")).mkString("\n")
+
+writeCsv(shapes)
