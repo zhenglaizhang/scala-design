@@ -225,3 +225,20 @@ case class Branch[A](left: Tree[A], right: Tree[A]) extends Tree[A]
 case class Leaf[A](v: A) extends Tree[A]
 CsvEncoder[Tree[Int]]
 // diverging implicit expansion for type CsvEncoder[Tree[Int]]
+
+case class Meow(f: Float, d: Double)
+
+//CsvEncoder[Meow]
+//could not find implicit value for evidence parameter of type CsvEncoder[Meow]
+
+//CsvEncoder[Float :: Double :: HNil]
+//could not find implicit value for evidence parameter of type CsvEncoder[Float :: Double :: shapeless.HNil]
+
+//CsvEncoder[Float]
+//could not find implicit value for evidence parameter of type CsvEncoder[Float]
+
+CsvEncoder[Double]
+
+//import scala.reflect
+// todo ??? reflect.reify missing
+
