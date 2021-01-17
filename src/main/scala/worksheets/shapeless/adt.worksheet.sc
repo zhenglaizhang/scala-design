@@ -168,10 +168,21 @@ val reprEnc = CsvEncoder[Boolean :: String :: Double :: HNil]
 val repr2: CsvEncoder[Boolean :: String :: Double :: HNil] = implicitly
 reprEnc.encode(true :: "A" :: 1.2 :: HNil)
 
-implicit val iceEncoder: CsvEncoder[IceCream] = {
-  val gen = Generic[IceCream]
-  val reprEnc = CsvEncoder[gen.Repr]
-  CsvEncoder.instance(ic => reprEnc.encode(gen.to(ic)))
-}
+//implicit val iceEncoder: CsvEncoder[IceCream] = {
+//  val gen = Generic[IceCream]
+//  val reprEnc = CsvEncoder[gen.Repr]
+//  CsvEncoder.instance(ic => reprEnc.encode(gen.to(ic)))
+//}
+
+implicit def genericEncoder[A, R](implicit
+//    gen: Generic[A] { type Repr = R },
+    // todo: ???
+    gen: Generic.Aux[A, R],
+    enc: CsvEncoder[R]
+): CsvEncoder[A] =
+  CsvEncoder.instance(ic => enc.encode(gen.to(ic)))
+
+case class People(name: String, age: Int, male: Boolean)
 
 IceCream("a", 1, false).toCsv
+People("p", 12, false).toCsv
