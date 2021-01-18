@@ -40,3 +40,7 @@ case class Thing[A, B](@specialized a: A, @specialized b: B)
 // If you’re curious, currently these classes are specialized in Scala (list may be incomplete): 
 // - Function0, Function1, Function2, Tuple1, Tuple2, Product1, Product2, AbstractFunction0, AbstractFunction1, AbstractFunction2. 
 // Due to how costy it is to specialize beyond 2 parameters, it’s a trend to not specialize for more params, although certainly possible.
+
+
+// Specialization is quite powerful, yet at the same time it’s a bit of a "compiler bomb", with it’s exponential growth potential.
+// http://scala-miniboxing.org/
