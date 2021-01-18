@@ -49,10 +49,39 @@ val bar = if (false) 23 else null
 
 // abstract class AnyVal extends Any with NotNull
 
-
 //
 // Type of an object
 //
-object Obj 
+object Obj
 def takeObj(obj: Obj.type) = ()
 takeObj(Obj)
+
+//
+// self type annotation
+//
+// Self Types are used in order to "require" that, if another class uses this trait, it should also provide implementation of whatever it is that you’re requiring.
+
+class ServiceInModule {
+  def doSth() = ()
+}
+trait ApiModule {
+  lazy val serviceInModule = new ServiceInModule
+}
+
+trait MongoModule {
+  def getDoc() = ()
+}
+
+trait Service {
+  self: ApiModule with MongoModule => // I’m a Module
+  // Someone will have to give us this Module at instantiation time
+  // Not same with extending Module
+  // In fact, you can use any identifier (not just this or self) and then refer to it from your class.
+
+  def doTheThing() = self.serviceInModule.doSth()
+  def get() = self.getDoc()
+}
+
+trait TestingModule extends ApiModule with MongoModule {}
+// new Service {}
+new Service with TestingModule {}
