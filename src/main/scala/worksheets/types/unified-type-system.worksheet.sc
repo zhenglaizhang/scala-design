@@ -48,3 +48,11 @@ val bar = if (false) 23 else null
 // Null            -> AnyRef -> [Any]
 
 // abstract class AnyVal extends Any with NotNull
+
+
+//
+// Type of an object
+//
+object Obj 
+def takeObj(obj: Obj.type) = ()
+takeObj(Obj)
