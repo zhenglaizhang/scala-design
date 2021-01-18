@@ -1,3 +1,4 @@
+import akka.actor.typed.delivery.ConsumerController.Start
 import scala.collection.mutable.ArrayBuffer
 // We refer to a Scala’s typesystem as being "unified" because there is a "Top Type", Any
 // Scala takes on the idea of having one common Top Type for all Types by introducing Any. Any is a supertype of both AnyRef and AnyVal.
@@ -85,3 +86,28 @@ trait Service {
 trait TestingModule extends ApiModule with MongoModule {}
 // new Service {}
 new Service with TestingModule {}
+
+//
+// Phantom Type
+//
+// Types that are not instantiate, ever
+// Instead of using them directly, we use them to even more strictly enforce some logic, using our types.
+
+sealed trait ServiceState
+final class Started extends ServiceState
+final class Stopped extends ServiceState
+
+class MyService[State <: ServiceState] private () {
+  def start[T >: State <: Stopped]() = this.asInstanceOf[MyService[Started]]
+  def stop[T >: State <: Started]() = this.asInstanceOf[MyService[Stopped]]
+  // Since nothing is actually using this type, you won’t bump into class cast exceptions during this conversion.
+}
+object MyService {
+  def apply() = new MyService[Stopped]
+  def create() = apply()
+}
+
+val initStopped = MyService.create()
+val started = initStopped.start()
+val stopped = started.stop();
+// Phantom Types are yet another great facility to make our code even more type-safe (or shall I say "state-safe"!?).
