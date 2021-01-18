@@ -1,8 +1,16 @@
 // Scala allows us to have Dynamic Types, right inside of a Statically/Strictly Typed language!
 
+import scala.collection.mutable
 import scala.language.dynamics
 
-class JSON(s: String) extends Dynamic {}
+// Dynamic - marker trait to enable dynamic invocation
+class JSON(s: String) extends Dynamic {
+
+  def parse(s: String): Map[String, String] = ???
+
+  // act as a field
+  def selectDynamic(name: String): Option[String] = parse(s).get(name)
+}
 
 val jsonString =
   """
@@ -47,3 +55,19 @@ object JSON extends Dynamic {
 }
 
 JSON.node(nickname = "kusto", age = 12, male = true)
+
+object MagicBox extends Dynamic {
+  private val box = mutable.Map[String, Any]()
+
+  def updateDynamic(name: String)(value: Any) {
+    box(name) = value
+  }
+
+  def selectDynamic(name: String) = box(name)
+}
+
+MagicBox.banabana = "banabana"
+MagicBox.banabana
+
+//MagicBox.unknown
+//java.util.NoSuchElementException: key not found: unknown
