@@ -1,3 +1,7 @@
+// todo
+// https://www.alessandrolacava.com/blog/scala-self-recursive-types/#:~:text=One%20of%20the%20advantages%20of,
+// constraint%20to%20your%20type%20definitions.
+
 //
 // self-recursive types, aka F-bounded polymorphic types
 //  - you can use the type system to enforce some constraints
