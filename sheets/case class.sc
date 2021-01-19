@@ -113,7 +113,8 @@ object Natural {
   //    if (value < 0) None else Some(new Natural(value))
 
   // smart ctor
-  // more natural
+  // The name fromInt communicates more clearly the concept of a possible failure while one expects that apply is a
+  // non-effectful method
   def fromInt(n: Int): Option[Natural] = if (n >= 0) Some(Natural(n)) else None
 }
 
