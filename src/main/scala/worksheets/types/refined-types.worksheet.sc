@@ -16,6 +16,7 @@ import eu.timepit.refined.api.Refined
 // https://stackoverflow.com/questions/43051076/refined-and-existential-types-for-runtime-values
 // https://kubuszok.com/2018/kinds-of-types-in-scala-part-3/
 // https://www.slideshare.net/techtriveni/lets-refine-your-scala-code
+// https://www.john-cd.com/cheatsheets/Scala/Scala_Design_Patterns/#static-factory
 
 // refined types
 //  - if it compiles, then it works
