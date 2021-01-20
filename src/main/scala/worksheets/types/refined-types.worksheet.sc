@@ -7,8 +7,16 @@ import eu.timepit.refined.collection.Empty
 import eu.timepit.refined.boolean.Not
 import eu.timepit.refined.numeric.Positive
 import eu.timepit.refined.api.Refined
+// todo: read
 // https://www.youtube.com/watch?v=UlxxQRniW-k
 // https://medium.com/swlh/refined-types-the-good-the-bad-and-the-ugly-ee971e5d9137
+// https://kwark.github.io/refined-in-practice/#1
+// http://www.beyondthelines.net/programming/refined-types/
+// https://tech.ovoenergy.com/safe-expressive-code-with-refinement-types/
+// https://stackoverflow.com/questions/43051076/refined-and-existential-types-for-runtime-values
+// https://kubuszok.com/2018/kinds-of-types-in-scala-part-3/
+// https://www.slideshare.net/techtriveni/lets-refine-your-scala-code
+
 // refined types
 //  - if it compiles, then it works
 
