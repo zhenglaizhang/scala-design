@@ -1,4 +1,5 @@
 // https://www.artima.com/scalazine/articles/stackable_trait_pattern.html
+// https://www.fyber.com/engineering/stackable-trait-patterns-part-i-2/
 
 import scala.collection.mutable.ArrayBuffer
 // Scala design pattern in which traits provide stackable modifications to underlying core classes or traits.
