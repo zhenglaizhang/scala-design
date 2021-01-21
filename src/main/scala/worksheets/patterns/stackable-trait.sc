@@ -1,10 +1,14 @@
+// https://www.artima.com/scalazine/articles/stackable_trait_pattern.html
+
 import scala.collection.mutable.ArrayBuffer
 // Scala design pattern in which traits provide stackable modifications to underlying core classes or traits.
 // A trait (or class) can play one of three roles: the base, a core, or a stackable.
 // The base trait (or abstract class) defines an abstract interface that all the cores and stackables extend,
 // as shown below.
-// The core traits (or classes) implement the abstract methods defined in the base trait, and provide basic, core functionality.
-// Each stackable overrides one or more of the abstract methods defined in the base trait, using Scala's abstract override modifiers,
+// The core traits (or classes) implement the abstract methods defined in the base trait, and provide basic, core
+// functionality.
+// Each stackable overrides one or more of the abstract methods defined in the base trait, using Scala's abstract
+// override modifiers,
 // and provides some behavior and at some point invokes the super implementation of the same method.
 // In this manner, the stackables modify the behavior of whatever core they are mixed into.
 // core -----------
@@ -54,9 +58,47 @@ trait Doubling extends IntQueue {
 }
 
 class MyQ extends BasicIntQueue with Doubling
+
 val mq = new MyQ
 mq.put(10)
 mq.get()
+
+//
+val mq = new BasicIntQueue with Doubling
+mq.put(1)
+mq.get
+
+// another 2 modification traits
+
+trait Incrementing extends IntQueue {
+  abstract override def put(x: Int) {
+    super.put(x + 1)
+  }
+}
+
+trait Filtering extends IntQueue {
+  abstract override def put(x: Int) {
+    if (x > 0) super.put(x)
+  }
+}
+
+val q = new BasicIntQueue with Incrementing with Filtering
+q.put(-1)
+q.put(0)
+q.put(1)
+q.get
+
+// The order of mixins is significant.
+// (Once a trait is mixed into a class, you can alternatively call it a mixin.)
+// Roughly speaking, traits further to the right take effect first.
+// When you call a method on a class with mixins,
+// the method in the trait furthest to the right is called first.
+// If that method calls super, it invokes the method in the next trait to its left, and so on
+
+// Overall, code written in this style gives you a great deal of flexibility.
+// You can define sixteen different classes by mixing in these three traits in different combinations and orders.
+// That's a lot of flexibility for a small amount of code, so you should keep your eyes open for opportunities to
+// arrange code as stackable modifications.
 
 abstract class StringWriter {
   def write(s: String): String
