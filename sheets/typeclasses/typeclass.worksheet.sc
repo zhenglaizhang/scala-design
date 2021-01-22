@@ -3,6 +3,14 @@
 // implicit convension
 // frowned
 
+//Ad-hoc polymorphism
+//Break free from your class oppressors!
+//Concerns that cross class hierarchy e.g. serialize to JSON
+//Common behaviour without (useful) common type
+//Abstract behaviour to a type class
+//Can implement type class instances in ad-hoc manner
+//Can use context-bound type parameters
+
 trait Printable[A] {
   def print(a: A): String
 }
@@ -47,3 +55,7 @@ import PrintableSyntax._
 12.print
 cat.format
 cat.print
+
+def p[A: Printable](x: A): Unit = {
+  implicitly[Printable[A]].print(x)
+}
