@@ -1,3 +1,6 @@
+// A type class is a bundle of types and operations defined on them.
+// Most type classes have laws that implementations are required to satisfy.
+
 // def implicitly2[A](implicit value: A): A = value
 
 // implicit convension
@@ -11,11 +14,14 @@
 //Can implement type class instances in ad-hoc manner
 //Can use context-bound type parameters
 
+// defines a way of printing a type A
 trait Printable[A] {
   def print(a: A): String
 }
 
 object PrintableInstances {
+  // A type class instance, or simply instance, is an implementation of a type class for a given set of types.
+  // Such instances are usually made implicit so the compiler can thread them through functions that require them.
   implicit val strPrintable = new Printable[String] {
     override def print(a: String): String = a
   }
@@ -26,11 +32,16 @@ object PrintableInstances {
 }
 
 object Printable {
+  def apply[A: Printable](): Printable[A] = implicitly[Printable[A]]
+
   def format[A](a: A)(implicit p: Printable[A]): String = p.print(a)
 
   def print[A](a: A)(implicit p: Printable[A]): Unit = println(p.print((a)))
 }
+
 import PrintableInstances._
+
+Printable[Int].print(12)
 Printable.print(12)
 Printable.print("abc")
 
@@ -43,11 +54,16 @@ implicit val catPrinter = new Printable[Cat] {
 Printable.print(cat)
 
 object PrintableSyntax {
-  implicit class PrintableOps[A](a: A) {
-    def format()(implicit p: Printable[A]): String = p.print(a)
+
+  // Convenient syntax, sometimes called extension methods,
+  // can be added to types to make it easier to use type classes.
+  // we can put the context bounds at class level or method level
+  implicit class PrintableOps[A: Printable](a: A) {
+    def format(): String = Printable[A].print(a)
 
     def print()(implicit p: Printable[A]): Unit = println(p.print(a))
   }
+
 }
 
 import PrintableSyntax._
