@@ -2,8 +2,6 @@
 
 // implicit convension
 // frowned
-// import scala.language.implicitConversions
-// implicit def strToInt(str: String): Int = { str.length() }
 
 trait Printable[A] {
   def print(a: A): String
