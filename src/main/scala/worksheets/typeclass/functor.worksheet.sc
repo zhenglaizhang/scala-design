@@ -1,3 +1,76 @@
+// A functor F[_] is a type constructor of kind * -> *.
+// In the most general case, an F[A] represents a recipe that may halt, run forever, or produce 0 or more A's.
+//
+// identity:
+//  - map(fa)(identity) == fa
+// composition
+//  - map(map(fa)(ab))(bc) == map(fa)(ab.andThen(bc))
+
+object functor {
+
+  // Technically, this is a covariant endofunctor,
+  trait Functor[F[_]] {
+    def map[A, B](fa: F[A])(f: A => B): F[B]
+  }
+
+}
+
+// List is a functor, and List[Int] is a trivial description of a computation producing some number of Int's.
+
+// Natural Transformations
+// A polymorphic function that maps from one functor F[_] to another functor G[_] is called a natural transformation,
+// and is typically denoted using F ~> G. These functions are extremely important in higher-order functional
+// programming.
+trait NaturalTransformation[-F[_], +G[_]] {
+  def apply[A](fa: F[A]): G[A]
+}
+
+type ~>[-F[_], +G[_]] = NaturalTransformation[F, G]
+
+// Functor Composition
+//  - Two functors can be composed together in a variety of ways to yield another functor.
+case class Composite[F[_], G[_], A](run: F[G[A]])
+
+// The product of two functors is a functor.
+case class Product[F[_], G[_], A](run: (F[A], G[A]))
+
+// The sum (or coproduct) of two functors is a functor.
+case class Coproduct[F[_], G[_], A](run: Either[F[A], G[A]])
+
+//
+// Lifting
+//
+//  - Often, for some value X, F[X] is referred to as the "lifted" version of X, because it is the same value, but
+//  placed "inside" of some functor F. For example, you can lift the function x => x * x inside List by writing List
+//  (x => x * x).
+
+//
+// Apply
+//  - Some functors implement Apply, which provides a way of applying a lifted function F[A => B] to some lifted
+//  value F[A] to yield F[B].
+//  - Associative Composition
+//  -  ap(ap(fa)(fab))(fbc) == ap(fa)(ap(fab)(map(fbc)(_.compose(_).curry))
+trait Apply[F[_]] extends functor.Functor[F] {
+  def apply[A, B](fa: F[A])(fab: F[A => B]): F[B]
+}
+
+//
+// Applicative
+//  - Some functors that implement Apply also implement Applicative,
+//    which provides the ability to lift any value into the functor.
+trait Applicative[F[_]] extends Apply[F] {
+  def point[A](a: A): F[A]
+
+  // Identity
+  //  - ap(fa)(point(_)) == fa
+  // Homomorphism
+  //  - ap(point(a))(point(ab)) == point(ab(a))
+  // Interchange
+  //  - ap(point(a))(fab) == ap(fab)(point(_.apply(a)))
+  // Derived Map
+  //  - map(fa)(ab) == ap(fa)(point(ab))
+}
+
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Await
 import scala.concurrent.Future
@@ -31,12 +104,6 @@ val func = ((x: Int) => x.toDouble)
   .map(_ * 2)
   .map(n => s"${n}")
 func(123)
-
-object functor {
-  trait Functor[F[_]] {
-    def map[A, B](fa: F[A])(f: A => B): F[B]
-  }
-}
 
 import cats.Functor
 import cats.instances.list._
