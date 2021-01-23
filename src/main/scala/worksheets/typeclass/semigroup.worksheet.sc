@@ -1,3 +1,8 @@
+// Semigroups allows combining two things of the same type into another thing of the same type.
+// For example, addition forms a semigroup over integers.
+// Monoids add the additional property of having an "zero" element, which you can append to a value without changing
+// the value.
+
 import cats.Semigroupal
 import cats.instances.option._
 

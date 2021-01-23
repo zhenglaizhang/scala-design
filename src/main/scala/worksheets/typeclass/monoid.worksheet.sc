@@ -1,10 +1,12 @@
 object show {
   trait Semigroup[A] {
     // be associative
+    // combine(a1, combine(a2, a3)) == combine(combine(a1, a2), a3)
     def combine(x: A, y: A): A
   }
   trait Monoid[A] extends Semigroup[A] {
-    // identity element
+    // identity or zero element
+    // combine(a, empty) == a
     def empty: A
   }
 }
