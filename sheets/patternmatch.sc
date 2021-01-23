@@ -1,3 +1,25 @@
+// match on type
+def doSeqMatch[A](seq: Seq[A]): String =
+  seq match {
+    case Nil => "Nothing"
+    case head +: _ =>
+      head match {
+        case _: Double => "Double"
+        case _: String => "String"
+        case _: Int => "Int"
+        case _ => "Unmatched seq element"
+      }
+
+  }
+
+for {
+  x <- Seq(List(1, 12), Nil, Vector("a", "b"))
+} yield x match {
+  case s: List[_] => s"${doSeqMatch(s)}"
+  case s: Vector[_] => s"${doSeqMatch(s)}"
+  case _ => "unknown"
+}
+
 val wordFrequencies = ("habitual", 6) :: ("and", 56) :: ("consuetudinary", 2) ::
   ("additionally", 27) :: ("homely", 5) :: ("society", 13) :: Nil
 def wordsWithoutOutliers(wordFrequencies: Seq[(String, Int)]): Seq[String] =
