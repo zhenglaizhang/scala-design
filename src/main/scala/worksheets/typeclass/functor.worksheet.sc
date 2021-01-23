@@ -71,6 +71,29 @@ trait Applicative[F[_]] extends Apply[F] {
   //  - map(fa)(ab) == ap(fa)(point(ab))
 }
 
+//
+// Bind
+//  - Some functors that implement Apply also implement Bind, which adds the ability to extend a recipe F[A] with a
+//  second recipe that depends on the result of A (A => F[B]), and collapse the result into a single recipe F[B]
+trait Bind[F[_]] extends Apply[F] {
+  def bind[A, B](fa: F[A])(afb: A => F[B]): F[B]
+
+  // Associative Bind
+  //  - bind(bind(fa)(afb))(bfc) == bind(fa)((a) => bind(afb(a))(bfc))
+  // Derived Ap
+  //  - ap(fa)(fab) == bind(fab)(map(fa)(_))
+}
+
+//
+// Monad
+//  - Some functors that implement Applicative and Bind are Monads.
+trait Monad[F[_]] extends Applicative[F] with Bind[F]
+
+// Right Identity
+//  bind(fa)(point(_)) = fa
+// Left Identity
+//  bind(point(a))(afb) == afb(a)
+
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Await
 import scala.concurrent.Future
