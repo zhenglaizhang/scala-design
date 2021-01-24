@@ -11,6 +11,12 @@
 //  arguments followed by implicit arguments.
 //  -3. All the arguments are implicit when the list starts with the implicit keyword.
 
+// Wise Use of implicits
+// - However, because the implicit arguments and values passed for them are almost invisible, code comprehension is
+// harder.
+// - One way to improve their visibility is to adopt the practice of putting implicit values in a special package
+// named implicits or an object named Implicits.
+
 case class MyList[A](list: List[A]) {
   def sortBy1[B](f: A => B)(implicit ord: Ordering[B]): List[A] =
     list.sortBy(f)(ord)

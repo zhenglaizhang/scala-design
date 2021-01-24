@@ -26,6 +26,39 @@
 //Can implement type class instances in ad-hoc manner
 //Can use context-bound type parameters
 
+//
+// Implicit Resolution Rules
+//
+// use the term “value” in the following discussion, although methods, values, or classes can be used, depending on
+// the implicit scenario:
+//  - Any type-compatible implicit value that doesn’t require a prefix path.
+//    In other words, it is defined in the same scope, such as within the same block of code, within the same type,
+//    within its companion object (if any), and within a parent type.
+//  - An implicit value that was imported into the current scope.(It also doesn’t require a prefix path to use it.)
+//  Imported values, the second bullet point, take precedence over the already-in-scope values.
+//  In some cases, several possible matches are type compatible. The most specific match wins.
+//  If two or more implicit values are ambiguous, such as they have the same specific type, it triggers a compiler
+//  error.
+
+//
+//  Scala Built-in Implicits
+//  - The source code for the Scala 2.11 library has more than 300 implicit methods, values, and types
+//  - All of the companion objects for AnyVal types have widening conversions,
+//     because of the implicit conversion feature, the Scala grammar doesn’t need to implement the most common type
+//     conversions
+
+object SomeBuiltInImplicitsDemo {
+  // @inline annotation, which encourages the compiler to try especially hard to inline the method call, elimi‐
+  // nating the stack frame overhead.
+  // @noinline annotation that prevents the compiler from attempting to inline the method call, even if it can.
+  @inline implicit def int2Long(x: Int): Long = x.toLong
+
+  @inline implicit def int2BigDecimal(x: Int): BigDecimal = BigDecimal(x)
+
+  @inline implicit def option2Iterable[A](xo: Option[A]): Iterable[A] =
+    xo.toList
+}
+
 // defines a way of printing a type A
 trait Printable[A] {
   def print(a: A): String
@@ -89,5 +122,18 @@ def p[A: Printable](x: A): Unit = {
   implicitly[Printable[A]].print(x)
 }
 
-//implicit case class IntToStr(v: Int)
+// implicit & case cannot be used together
+//  implicit case class IntToStr(v: Int)
 // illegal combination of modifiers: implicit and case for: class IntToStr
+
+val zipped = List(1, 2, 3) zip List("1", "2", "3", "4")
+val products = zipped map { case (x, y) => x * y.toInt }
+val pair = (List(1, 2, 3), List(4, 5, 6))
+val unpair = pair.invert
+
+//$conforms
+
+import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
+//DecorateAsJava
+//DecorateAsScala
