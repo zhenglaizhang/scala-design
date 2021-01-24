@@ -99,3 +99,8 @@ def byNameAssert(predicate: => Boolean) =
   if (!predicate) throw new AssertionError
 byNameAssert(4 > 1)
 
+def sum(x: String, y: String) = x + y
+val csum: String => (String => String) = sum.curried
+csum("a")("b")
+val csum2 = (sum _).curried
+Function.uncurried(csum)("a", "b")

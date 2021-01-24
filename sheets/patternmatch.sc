@@ -74,6 +74,10 @@ val p: (String, Int) => Boolean = {
 // Partial functions
 //
 
+val inverse: PartialFunction[Double, Double] = {
+  case d if d != 0.0 => 1.0 / d
+}
+
 // the partial function both filters and maps the sequence
 val pf: PartialFunction[(String, Int), String] = {
   case (word, freq) if freq > 3 && freq < 25 => word

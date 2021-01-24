@@ -39,7 +39,11 @@ object Module {
   }
 
   def partial[A, B, C](a: A, f: (A, B) => C): B => C = b => f(a, b)
+
+  // currying transforms a function that takes multiple arguments into a chain of functions, each taking a single
+  // argument.
   def curry[A, B, C](f: (A, B) => C): A => B => C = a => b => f(a, b)
+
   def compose[A, B, C](f: B => C, g: A => B): A => C = a => f(g(a))
 
   def main(args: Array[String]): Unit = {
@@ -51,7 +55,7 @@ object Module {
 
   def foo(xs: List[Int]): Unit =
     xs match {
-      case head :: next if head % 2 != 0 => foo(next)
-      case Nil                           => Nil
+      case head +: next if head => foo(next) // head is of type Any but not Int
+      case Nil                  => Nil
     }
 }
