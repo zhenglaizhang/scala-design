@@ -1,6 +1,13 @@
 // Do not confuse partially applied functions with partially defined functions,
 // which are represented by the PartialFunction type in Scala.
 
+// partial function
+//  - a partial function takes a single argument of some type, but it is not defined for all values of that type.
+// A partially applied function is an expression with some, but not all of a function’s argument lists applied (or
+// provided), returning a new function that takes the remaining argument lists. A partial function is a
+// single-argument function that is not defined for all values of the type of its argument. The literal syntax for a
+// partial function is one or more case match clauses enclosed in curly braces.
+
 case class Email(
                   subject: String,
                   text: String,
@@ -26,7 +33,9 @@ val maximumSize: (Int, Email) => Boolean = sizeConstraint(le, _, _)
 val constr20: (IntPairPred, Email) => Boolean = sizeConstraint(_, 20, _)
 
 // From methods to function objects
-// When doing partial application on a method, you can also decide to not bind any parameters whatsoever. The parameter list of the returned function object will be the same as for the method. You have effectively turned a method into a function that can be assigned to a val or passed around:
+// partially applied function
+// When doing partial application on a method, you can also decide to not bind any parameters whatsoever. The
+// parameter list of the returned function object will be the same as for the method. You have effectively turned a method into a function that can be assigned to a val or passed around:
 val sizeConstraintFn: (IntPairPred, Int, Email) => Boolean = sizeConstraint _
 
 val min20: EmailFilter = minimumSize(20, _: Email)
