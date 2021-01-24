@@ -1,3 +1,8 @@
+//The compiler can’t tell whether or not the
+//match clauses on Enumeration values are exhaustive. If we converted this example to
+//use Enumeration and forgot a match clause for Trace, we would only know at runtime
+//when a MatchError is thrown
+
 // match on type
 def doSeqMatch[A](seq: Seq[A]): String =
   seq match {
@@ -12,12 +17,33 @@ def doSeqMatch[A](seq: Seq[A]): String =
 
   }
 
+// workaround type erasure
 for {
   x <- Seq(List(1, 12), Nil, Vector("a", "b"))
 } yield x match {
   case s: List[_] => s"${doSeqMatch(s)}"
   case s: Vector[_] => s"${doSeqMatch(s)}"
   case _ => "unknown"
+}
+
+// Case class has another method generated called unapply,
+// which is used for extraction or “deconstruction.”
+// Indeed there is such an extractor method and it is invoked when a pattern-match
+// expression like this is encountered:
+case class Address(s: String)
+
+case class Person(name: String, age: Int, address: Address)
+
+object Person {
+  def apply(name: String, age: Int, address: Address) =
+    new Person(name, age, address)
+
+  // To gain some perf benefits, unapply can return any type as long as it has following methods:
+  //  - def isEmpty: Boolean
+  //  - def get: T
+  // unapply methods are invoked recursively
+  def unapply(p: Person): Option[(String, Int, Address)] =
+    Some((p.name, p.age, p.address))
 }
 
 val wordFrequencies = ("habitual", 6) :: ("and", 56) :: ("consuetudinary", 2) ::

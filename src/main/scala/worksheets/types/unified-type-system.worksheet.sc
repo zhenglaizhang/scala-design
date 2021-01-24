@@ -86,6 +86,7 @@ trait Service {
 }
 
 trait TestingModule extends ApiModule with MongoModule {}
+
 // new Service {}
 new Service with TestingModule {}
 
@@ -94,14 +95,20 @@ new Service with TestingModule {}
 //
 // Types that are not instantiate, ever
 // Instead of using them directly, we use them to even more strictly enforce some logic, using our types.
+// We only care that the type exists. It functions as a “marker.” We won’t actually use any instances of it.
+// Phantom types are very useful for defining work flows that must proceed in a particular order.
 
 sealed trait ServiceState
+
 final class Started extends ServiceState
+
 final class Stopped extends ServiceState
 
 class MyService[State <: ServiceState] private () {
   def start[T >: State <: Stopped]() = this.asInstanceOf[MyService[Started]]
+
   def stop[T >: State <: Started]() = this.asInstanceOf[MyService[Stopped]]
+
   // Since nothing is actually using this type, you won’t bump into class cast exceptions during this conversion.
 }
 object MyService {
