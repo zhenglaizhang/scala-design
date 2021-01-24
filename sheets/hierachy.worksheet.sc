@@ -36,9 +36,15 @@ x1 ne x2
 
 def error(msg: String): Nothing = throw new RuntimeException(msg)
 
+//
 // value class
+//  - Value types where the extra runtime overhead is eliminated during compilation.
 // class Dollars(val amount: Int) extends AnyVal {
 //   override def toString(): String = "$" + amount
 // }
 
 // define a tiny type for each domain concept
+
+// the compiler will auto tuple arguments to a method when needed
+def m(pair: (Int, String)) = println(pair)
+m(1, "two")

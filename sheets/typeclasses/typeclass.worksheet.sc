@@ -1,12 +1,24 @@
 // A type class is a bundle of types and operations defined on them.
 // Most type classes have laws that implementations are required to satisfy.
 
+// With implicit conversions, it’s feasible to “add”toJSON and toXML methods to any type.
+// The Type Class Pattern is ideal for situations where certain clients will benefit from the “illusion” that a set
+// of classes provide a particular behavior that isn’t useful for the ma‐ jority of clients. Used wisely, it helps
+// balance the needs of various clients while main‐ taining the Single Responsibility Principle.
+
+// Type classes help us avoid the temptation of creating “kitchen-sink” abstractions, like Java’s Object, because we
+// can add behavior on an ad hoc basis. Scala’s -> pair- construction idiom is one example. Recall that we aren’t
+// modifying these types; we are using the implicit mechanism to wrap objects with types that provide the behaviors
+// we need. It only appears that we are modifying the types,
+
 // def implicitly2[A](implicit value: A): A = value
 
 // implicit convension
 // frowned
 
-//Ad-hoc polymorphism
+//Ad-hoc polymorphism (extension method)
+//  - vs subtype polymorphism
+//  - vs parametric pholimorphism
 //Break free from your class oppressors!
 //Concerns that cross class hierarchy e.g. serialize to JSON
 //Common behaviour without (useful) common type
@@ -67,6 +79,7 @@ object PrintableSyntax {
 }
 
 import PrintableSyntax._
+
 12.format
 12.print
 cat.format
@@ -75,3 +88,6 @@ cat.print
 def p[A: Printable](x: A): Unit = {
   implicitly[Printable[A]].print(x)
 }
+
+//implicit case class IntToStr(v: Int)
+// illegal combination of modifiers: implicit and case for: class IntToStr
