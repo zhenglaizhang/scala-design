@@ -104,3 +104,7 @@ val csum: String => (String => String) = sum.curried
 csum("a")("b")
 val csum2 = (sum _).curried
 Function.uncurried(csum)("a", "b")
+
+Function.tupled(sum)("a" -> "b")
+sum.tupled("a" -> "b")
+Function.untupled(sum.tupled)("a", "b")

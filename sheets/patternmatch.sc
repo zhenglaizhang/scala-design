@@ -78,6 +78,9 @@ val inverse: PartialFunction[Double, Double] = {
   case d if d != 0.0 => 1.0 / d
 }
 
+val inverseOption = inverse.lift
+val inverse2 = inverseOption.unlift
+
 // the partial function both filters and maps the sequence
 val pf: PartialFunction[(String, Int), String] = {
   case (word, freq) if freq > 3 && freq < 25 => word
