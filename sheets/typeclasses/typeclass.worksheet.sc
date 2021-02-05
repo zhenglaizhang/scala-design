@@ -1,3 +1,9 @@
+// Type classes
+//  - powerful tool in FP
+//  - enable ad-hoc polymorphism, commonly known as overloading
+//  - OO leveages subtyping for polymorphic code
+//  - FP uses a combination of parametric polymorphism (type parameters) and ad-hoc polymorphism
+
 // A type class is a bundle of types and operations defined on them.
 // Most type classes have laws that implementations are required to satisfy.
 
@@ -46,6 +52,7 @@
 //  - All of the companion objects for AnyVal types have widening conversions,
 //     because of the implicit conversion feature, the Scala grammar doesn’t need to implement the most common type
 //     conversions
+
 
 object SomeBuiltInImplicitsDemo {
   // @inline annotation, which encourages the compiler to try especially hard to inline the method call, elimi‐
