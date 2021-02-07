@@ -25,6 +25,10 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("snapshots")
 )
 
+addCompilerPlugin(
+  "org.typelevel" %% "kind-projector" % "0.11.3" cross CrossVersion.full
+)
+
 lazy val akkaVersion = "2.6.10"
 libraryDependencies ++= Seq(
   "com.chuusai" %% "shapeless" % "2.3.3",
@@ -39,17 +43,16 @@ libraryDependencies ++= Seq(
   "ch.qos.logback" % "logback-classic" % "1.2.3",
   "com.typesafe.akka" %% "akka-actor-testkit-typed" % akkaVersion % Test,
   "org.scalatest" %% "scalatest" % "3.1.0" % Test,
-
-  "eu.timepit" %% "refined"                 % "0.9.20",
-  "eu.timepit" %% "refined-cats"            % "0.9.20", // optional
-  "eu.timepit" %% "refined-eval"            % "0.9.20", // optional, JVM-only
-  "eu.timepit" %% "refined-jsonpath"        % "0.9.20", // optional, JVM-only
-  "eu.timepit" %% "refined-pureconfig"      % "0.9.20", // optional, JVM-only
-  "eu.timepit" %% "refined-scalacheck"      % "0.9.20", // optional
-  "eu.timepit" %% "refined-scalaz"          % "0.9.20", // optional
-  "eu.timepit" %% "refined-scodec"          % "0.9.20", // optional
-  "eu.timepit" %% "refined-scopt"           % "0.9.20", // optional
-  "eu.timepit" %% "refined-shapeless"       % "0.9.20"  // optional
+  "eu.timepit" %% "refined" % "0.9.20",
+  "eu.timepit" %% "refined-cats" % "0.9.20", // optional
+  "eu.timepit" %% "refined-eval" % "0.9.20", // optional, JVM-only
+  "eu.timepit" %% "refined-jsonpath" % "0.9.20", // optional, JVM-only
+  "eu.timepit" %% "refined-pureconfig" % "0.9.20", // optional, JVM-only
+  "eu.timepit" %% "refined-scalacheck" % "0.9.20", // optional
+  "eu.timepit" %% "refined-scalaz" % "0.9.20", // optional
+  "eu.timepit" %% "refined-scodec" % "0.9.20", // optional
+  "eu.timepit" %% "refined-scopt" % "0.9.20", // optional
+  "eu.timepit" %% "refined-shapeless" % "0.9.20" // optional
 )
 // Here, `libraryDependencies` is a set of dependencies, and by using `+=`,
 // we're adding the cats dependency to the set of dependencies that sbt will go

@@ -98,3 +98,20 @@ implicit def deriveMonoidPair[A, B](implicit
 // We can do this through Scala’s implicit mechanism.
 
 combineAll(List(Pair(1, "hello"), Pair(2, "world")))
+
+// There are some types that can form a Semigroup but not a Monoid.
+// For example, the NonEmptyList
+
+// How then can we collapse a List[NonEmptyList[A]]
+// For any Semigroup[A], there is a Monoid[Option[A]].
+
+import cats.Monoid
+import cats.data.NonEmptyList
+import cats.implicits._
+
+val xs = List(NonEmptyList(1, List(2, 3)), NonEmptyList(4, List(5, 6))))
+val lifted = xs.map(nel => Option(nel))
+Monoid.combineAll(lifted)
+
+// todo
+// Monoid.combineAllOption(xs)
