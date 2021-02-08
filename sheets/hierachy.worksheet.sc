@@ -38,13 +38,27 @@ def error(msg: String): Nothing = throw new RuntimeException(msg)
 
 //
 // value class
+//  - Value class is equal to case class extend AnyVal with only one parameter
 //  - Value types where the extra runtime overhead is eliminated during compilation.
-// class Dollars(val amount: Int) extends AnyVal {
-//   override def toString(): String = "$" + amount
-// }
+//  - Value classes are not meant to provide a way to do stack allocation instead of heap allocation. That is
+//  generally something you have no control over.
+//  - Instead, they are designed to prevent extra object allocations that would occur when otherwise creating a
+//  "wrapper" class.
+class Dollars(val amount: Int) extends AnyVal {
+  override def toString(): String = "$" + amount
+}
+
+class FirstName(val value: String) extends AnyVal
+
+class LastName(val value: String) extends AnyVal
+
+val x = new FirstName("bob")
+// no instance of FirstName is actually created
+// and x is actually just a String at runtime
+// (assuming you don't do one of the things the docs describe that would force an allocation, such as pattern
+// matching). But in no way does AnyVal change how the wrapped String gets allocated.
 
 // define a tiny type for each domain concept
-
 // the compiler will auto tuple arguments to a method when needed
 def m(pair: (Int, String)) = println(pair)
 m(1, "two")
