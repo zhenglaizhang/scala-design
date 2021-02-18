@@ -52,7 +52,8 @@ libraryDependencies ++= Seq(
   "eu.timepit" %% "refined-scalaz" % "0.9.20", // optional
   "eu.timepit" %% "refined-scodec" % "0.9.20", // optional
   "eu.timepit" %% "refined-scopt" % "0.9.20", // optional
-  "eu.timepit" %% "refined-shapeless" % "0.9.20" // optional
+  "eu.timepit" %% "refined-shapeless" % "0.9.20", // optional
+  "org.typelevel" %% "kittens" % "2.2.1"
 )
 // Here, `libraryDependencies` is a set of dependencies, and by using `+=`,
 // we're adding the cats dependency to the set of dependencies that sbt will go
