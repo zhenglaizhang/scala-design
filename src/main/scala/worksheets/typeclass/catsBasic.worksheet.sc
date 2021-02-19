@@ -47,5 +47,35 @@ import cats.instances.future._ // when you’re doing the transformations on fut
 // the quick workaround is to just import cats.implicits._. 
 // This is not a preferred solution, though, as it can significantly increase compile times 
 //  — especially if used in many files across the project. 
-// It is generally considered good practice to use narrow imports to take some of the implicit resolution burden off the compiler
+//  - good practice to use narrow imports to take some of the implicit resolution burden off the compiler
 import cats.implicits._
+
+// The apply package provides (..., ..., ...).mapN syntax, 
+// which allows for an intuitive construct for applying a function that takes more than one parameter to multiple effectful values (like futures).
+import scala.concurrent.ExecutionContext.Implicits.global
+class ProcessingResult
+def intFuture: Future[Int] = ???
+def stringFuture: Future[String] = ???
+def userFuture: Future[User] = ???
+def process(value: Int, contents: String, user: User): ProcessingResult = ???
+import cats.instances.future._
+import cats.syntax.apply._
+//todo fixme
+// def processAsync: Future[ProcessingResult] = {
+//   (intFuture, stringFuture, userFuture).mapN {
+//     (v, c, u) => process(v, c, u)
+//   }
+// }
+// or shorter:
+// def processAsync2: Future[ProcessingResult] = (intFuture, stringFuture, userFuture).mapN(process)
+
+// If any of the chained futures fails, the resulting future will also fail with the same exception as the first failing future in the chain (this is fail-fast behavior).
+// What’s important, all futures will run in parallel, as opposed to what would happen in a for comprehension
+def processAsync: Future[ProcessingResult] = {
+  for {
+    v <- intFuture
+    c <- stringFuture
+    u <- userFuture
+  } yield process(v, c, u)
+}
+// In the above snippet (which under the hood translates to flatMap and map calls), which run in sequential 
