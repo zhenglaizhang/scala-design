@@ -1,9 +1,9 @@
+import cats.data.OptionT
 import scala.concurrent.Future
 import scala.util.Try
-// when Either is placed into effectful types such as Option orFuture, a large amount of boilerplate is required to
-// handle errors.
-// EitherT[F[_], A, B] is a lightweight wrapper for F[Either[A, B]] that makes it easy to compose Eithers and Fs
-// together.
+// EitherT[F, A, B] is the monad transformer for Either — you can think of it as a wrapper over a F[Either[A, B]] value.
+// when Either is placed into effectful types such as Option orFuture, a large amount of boilerplate is required to handle errors.
+// EitherT[F[_], A, B] is a lightweight wrapper for F[Either[A, B]] that makes it easy to compose Eithers and Fs together.
 
 import cats.data.EitherT
 import cats.implicits._
@@ -81,3 +81,42 @@ val myFutureET: EitherT[Future, Throwable, String] = myFuture.attemptT
 // Extracting an F[Either[A, B]] from an EitherT[F, A, B]
 val errorT: EitherT[Future, String, Int] = EitherT.leftT("foo")
 val error: Future[Either[String, Int]] = errorT.value
+
+
+abstract class BaseException(msg: String) extends Exception(msg)
+case class UserNotFoundException(msg: String) extends BaseException(msg)
+def getUserById(userId: Int): Future[Option[User]] = ???
+def ensureUserExists(userId: Int): EitherT[Future, BaseException, User] = {
+  OptionT(getUserById(userId)).toRight(left => UserNotFoundException(s"user not found, userId=$userId"))
+}
+
+case class Item(state: String)
+class ItemOrder  { /* ... */ }
+
+case class ItemNotFoundException(message: String) extends BaseException(message)
+case class InvalidItemStateException(message: String) extends BaseException(message)
+
+def getItemById(itemId: Int): Future[Option[Item]] = { /* .. */ ??? }
+
+def ensureItemExists(itemId: Int): EitherT[Future, BaseException, Item] = {
+  OptionT(getItemById(itemId))
+    .toRight(ItemNotFoundException(s"item not found, itemId = $itemId"))
+}
+
+def ensureItemStateIs(actual: String, expected: String): EitherT[Future, BaseException, Unit] = {
+  // Returns a Unit value wrapped into Right and then into Future if condition is true,
+  // otherwise the provided exception wrapped into Left and then into Future.
+  EitherT.cond(actual == expected, (), InvalidItemStateException(s"actual=$actual, expected=$expected"))
+}
+
+def placeOrderForItem(userId: Int, itemId: Int, count: Int): Future[ItemOrder] = { /* ... */ ??? }
+
+def buyItem(userId: Int, itemId: Int, count: Int): EitherT[Future, BaseException, ItemOrder] = {
+  for {
+    user <- ensureUserExists(userId)
+    item <- ensureItemExists(itemId)
+    _ <- ensureItemStateIs(item.state, "AVAILABLE_IN_STOCK")
+    // EitherT.liftF is necessary to make EitherT[Future, BaseException, ItemOrder] out of Future[ItemOrder]
+    placedOrder <- EitherT.liftF(placeOrderForItem(userId, itemId, count))
+  } yield placedOrder
+}

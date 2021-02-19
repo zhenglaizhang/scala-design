@@ -1,3 +1,5 @@
+def sumInts(xs: List[Int]): Int = xs.foldRight(0)(_ + _)
+def concatStrings(xs: List[String]): String = xs.foldRight("")(_ + _)
 def unionSets[A](xs: List[Set[A]]): Set[A] =
   xs.foldRight(Set.empty[A])(_ union _)
 

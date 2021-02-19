@@ -25,6 +25,8 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("snapshots")
 )
 
+val http4sVersion = "1.0.0-M16"
+
 addCompilerPlugin(
   "org.typelevel" %% "kind-projector" % "0.11.3" cross CrossVersion.full
 )
@@ -33,6 +35,9 @@ lazy val akkaVersion = "2.6.10"
 libraryDependencies ++= Seq(
   "com.chuusai" %% "shapeless" % "2.3.3",
   "org.typelevel" %% "cats-core" % "2.2.0",
+  "org.typelevel" %% "cats-laws" % "2.0.0" % Test,
+  "com.github.alexarchambault" %% "scalacheck-shapeless_1.14" % "1.2.3" % Test,
+
   "com.typesafe.akka" %% "akka-actor-typed" % akkaVersion,
   "com.typesafe.akka" %% "akka-remote" % akkaVersion,
   "com.typesafe.akka" %% "akka-cluster-typed" % akkaVersion,
@@ -53,7 +58,10 @@ libraryDependencies ++= Seq(
   "eu.timepit" %% "refined-scodec" % "0.9.20", // optional
   "eu.timepit" %% "refined-scopt" % "0.9.20", // optional
   "eu.timepit" %% "refined-shapeless" % "0.9.20", // optional
-  "org.typelevel" %% "kittens" % "2.2.1"
+  "org.typelevel" %% "kittens" % "2.2.1",
+  "org.http4s" %% "http4s-dsl" % http4sVersion,
+  "org.http4s" %% "http4s-blaze-server" % http4sVersion,
+  "org.http4s" %% "http4s-blaze-client" % http4sVersion
 )
 // Here, `libraryDependencies` is a set of dependencies, and by using `+=`,
 // we're adding the cats dependency to the set of dependencies that sbt will go

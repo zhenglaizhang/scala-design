@@ -11,6 +11,8 @@ object w {
 }
 
 import cats.Semigroup
+import cats.instances.int._
+import cats.instances.list._
 
 implicit val intAdditionSemigroup: Semigroup[Int] = _ + _
 
@@ -35,7 +37,6 @@ val m2 = Map("hello" -> 2, "cars" -> 3)
 Semigroup[Map[String, Int]].combine(m1, m2)
 m1 |+| m2
 
-import cats.implicits._
 // Cats provides many Semigroup instances out of the box such as Int (+) and String (++)…
 Semigroup[Int]
 Semigroup[String]
@@ -55,6 +56,8 @@ Semigroup[List[Foo]]
 Semigroup[(List[Foo], Int, String)]
 Semigroup[(List[Foo], Int)]
 
+// laws: associativity
+// To sum a List[Int] we can choose to either foldLeft or foldRight since all that changes is associativity.
 val leftwards = List(1, 2, 3).foldLeft(0)(_ |+| _)
 val rightwards = List(1, 2, 3).foldRight(0)(_ |+| _)
 val list = List(1, 2, 3, 4, 5)
@@ -88,3 +91,5 @@ val y = mergeMap(ym1, ym2)
 //  type of mergeMap satisfies the type of Semigroup specialized to Map[K, *] and is associative
 Semigroup[Map[Char, Int]].combine(xm1, xm2) == x
 Semigroup[Map[Int, List[String]]].combine(ym1, ym2) == y
+
+

@@ -79,3 +79,48 @@ def processAsync: Future[ProcessingResult] = {
   } yield process(v, c, u)
 }
 // In the above snippet (which under the hood translates to flatMap and map calls), which run in sequential 
+
+// Traversing
+// If you call traverse instead of map, like obj.traverse(fun), you’ll get G[F[A]], which will be Future[Option[B]]
+import cats.implicits._
+val xs: List[Future[Int]] = List(Future(1), Future(2), Future(3))
+xs.sequence
+// obj.sequence is in fact implemented in Cats as obj.traverse(identity).
+// On the other hand, obj.traverse(fun) is roughly equivalent to obj.map(fun).sequence.
+
+// flatTraverse
+// If you have an obj of type F[A] and a function fun of type A => G[F[B]], then doing obj.map(f) yields result of type F[G[F[B]]] — very unlikely to be what you wanted.
+// Traversing the obj instead of mapping helps a little — you’ll get G[F[F[B]] instead. 
+// Since G is usually something like Future and F is List or Option, you would end up with Future[Option[Option[A]] or Future[List[List[A]]]
+lazy val valueOpt: Option[Int] = ???
+def compute(v: Int): Future[Option[Int]] = ???
+def computeOverValue: Future[Option[Option[Int]]] = valueOpt.traverse(compute)
+def computeOverValue2: Future[Option[Int]] = valueOpt.traverse(compute).map(_.flatten)
+def computeOverValue3: Future[Option[Int]] = valueOpt.flatTraverse(compute)
+
+// Monad transformers
+// An instance of OptionT[F, A] can be thought of as a wrapper over F[Option[A]] which adds a couple of useful methods specific to nested types that aren’t available in F or Option itself. Most typically, your F will be Future (or sometimes slick’s DBIO, but this requires having an implementation of Cats type classes like Functor or Monad for DBIO). Wrappers such as OptionT are generally known as monad transformers.
+lazy val rf: Future[Option[Int]] = ???
+def mappedResultFuture: Future[Option[Int]] = rf map { maybeVal => maybeVal.map { v => ??? }}
+
+import cats.data.OptionT
+import cats.instances.future._
+def mappedResultFuture2: OptionT[Future, Int] = OptionT(rf).map {v => ???}
+val r: Future[Option[Int]] = mappedResultFuture2.value
+// Also a viable solution to fully switch to OptionT[Future, A] in method parameter/return types and completely (or almost completely) ditch Future[Option[A]] in type declarations.
+OptionT.fromOption[List](Some(2)) // OptionT(List(Some(2)))
+OptionT.liftF(List(1))
+OptionT.pure[List](12)
+// Mostly use OptionT(...) syntax in order to wrap an instance of Future[Option[A]] into Option[F, A].
+class Money { /* ... */ }
+
+class Account
+def findUserById(userId: Long): OptionT[Future, User] = { /* ... */ ??? }
+def findAccountById(accountId: Long): OptionT[Future, Account] = { /* ... */ ??? }
+def getReservedFundsForAccount(account: Account): OptionT[Future, Money] = { /* ... */ ??? }
+def getReservedFundsForUser(userId: Long): OptionT[Future, Money] = for {
+  user <- findUserById(userId)
+  account <- findAccountById(user.accountId)
+  funds <- getReservedFundsForAccount(account)
+} yield funds
+
