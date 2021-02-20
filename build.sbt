@@ -36,6 +36,8 @@ libraryDependencies ++= Seq(
   "com.chuusai" %% "shapeless" % "2.3.3",
   "org.typelevel" %% "cats-core" % "2.2.0",
   "org.typelevel" %% "cats-laws" % "2.0.0" % Test,
+  "org.typelevel" %% "cats-effect" % "2.3.1",
+  "org.typelevel" %% "cats-effect-laws" % "2.3.1" % "test",
   "com.github.alexarchambault" %% "scalacheck-shapeless_1.14" % "1.2.3" % Test,
 
   "com.typesafe.akka" %% "akka-actor-typed" % akkaVersion,
