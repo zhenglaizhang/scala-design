@@ -28,6 +28,7 @@ import cats.implicits._
 
 case class Foo(a: Int, b: String)
 
+// Eq.fromUniversalEquals only defers to ==
 implicit val eqFoo: Eq[Foo] = Eq.fromUniversalEquals
 Foo(100, "") === Foo(10, "")
 Foo(100, "") =!= Foo(10, "")

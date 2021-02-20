@@ -1,19 +1,63 @@
 // A functor F[_] is a type constructor of kind * -> *.
 // In the most general case, an F[A] represents a recipe that may halt, run forever, or produce 0 or more A's.
 //
-// identity:
+// A functor instance must obey two laws
+// Identity: Mapping with the identity function (x => x) is a no-op
 //  - map(fa)(identity) == fa
-// composition
-//  - map(map(fa)(ab))(bc) == map(fa)(ab.andThen(bc))
+//  - fa.map(x => x) == fa
+// Composition: Mapping with f and then again with g is the same as mapping once with the composition of f and g
+//  - map(map(fa)(f))(g) == map(fa)(f.andThen(g))
+//  - fa.map(f).map(g) == fa.map(f.andThen(g))
 
 object functor {
 
-  // Technically, this is a covariant endofunctor,
+  // technically, this is a covariant endofunctor,
   trait Functor[F[_]] {
+    //  Functor is a type class that abstracts over type constructors that can be map‘ed over.
     def map[A, B](fa: F[A])(f: A => B): F[B]
+
+    // Another way of viewing a Functor[F] is that F allows the lifting of a pure function A => B into the effectful function F[A] => F[B]
+    def lift[A, B](f: A => B): F[A] => F[B] =
+      fa => map(fa)(f)
   }
 
 }
+// Functors for effect management
+// The F in Functor is often referred to as an “effect” or “computational context.”
+// Different effects will abstract away different behaviors with respect to fundamental functions like map.
+// For instance, Option’s effect abstracts away potentially missing values, where map applies the function only in the
+// Some case but otherwise threads the None through.
+//
+// - We can view Functor as the ability to work with a single effect
+// - We can apply a pure function to a single effectful value without needing to “leave” the effect.
+
+// Functors compose
+//  - List[Either[String, Future[A]]]
+//  - _.map(_.map(_.map(f))
+//  - Functors compose, which means if F and G have Functor instances, then so does F[G[_]]
+//  - Such composition can be achieved via the Functor#compose method.
+import cats.Functor
+import cats.implicits._
+val listOption = List(Some(1), None, Some(2))
+Functor[List].compose[Option].map(listOption)(_ + 1)
+
+def needsFunctor[F[_]: Functor, A](fa: F[A]): F[Unit] =
+  Functor[F].map(fa)(_ => ())
+
+// This approach will allow us to use composition without wrapping the value in question, but can introduce complications in more complex use cases.
+def foo: List[Option[Unit]] = {
+  implicit val listOptionFunctor = Functor[List].compose[Option]
+  type ListOption[A] = List[Option[A]]
+  needsFunctor[ListOption, Int](listOption)
+}
+
+// We can make this nicer at the cost of boxing with the Nested data type.
+import cats.data.Nested
+import cats.implicits._
+val nested: Nested[List, Option, Int] = Nested(listOption)
+nested.map(_ + 1)
+// The Nested approach, being a distinct type from its constituents, will resolve the usual way modulo possible
+// SI-2712 issues (which can be addressed through partial unification), but requires syntactic and runtime overhead from wrapping and unwrapping.
 
 // List is a functor, and List[Int] is a trivial description of a computation producing some number of Int's.
 
