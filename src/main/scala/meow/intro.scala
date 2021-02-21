@@ -53,9 +53,9 @@ object Module {
     println(isSorted(Vector(1, 2, 3, 4), (_: Int) < (_: Int)))
   }
 
-  def foo(xs: List[Int]): Unit =
-    xs match {
-      case head +: next if head => foo(next) // head is of type Any but not Int
-      case Nil                  => Nil
-    }
+//  def foo(xs: List[Int]): Unit =
+//    xs match {
+//      case head +: next if head => foo(next) // head is of type Any but not Int
+//      case Nil                  => Nil
+//    }
 }
