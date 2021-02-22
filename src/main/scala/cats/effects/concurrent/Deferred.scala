@@ -1,10 +1,11 @@
+package cats.effects.concurrent
 import cats.effect.IO
 // Deferred
 //  - A purely functional synchronization primitive which represents a single value which may not yet be available.
 //  - When created, a Deferred is empty. It can then be completed exactly once, and never be made empty again.
 //  - e.g. shared variable, but you only care about the first write
 //  - Deferred can be used in conjunction with Ref to build complex concurrent behaviour and data structures like queues and semaphores.
-object w {
+object d1 {
   abstract class Deferred[F[_], A] {
     def get: F[A]
     def complete(a: A): F[Unit]
@@ -20,7 +21,6 @@ object w {
 //  - complete(a) on an empty Deferred will set it to a, and notify any and all readers currently blocked on a call to get.
 //  - complete(a) on a Deferred that has already been completed will not modify its content, and result in a failed F
 
-
 // created empty, can be completed exactly once
 // and can never be modified (or empty) again
 //  get on empty waits
@@ -30,7 +30,6 @@ object w {
 
 // Finally, the blocking mentioned above is semantic only, no actual threads are blocked by the implementation.
 
-
 // Only Once
 //  - Whenever you are in a scenario when many processes can modify the same value but you only care about the first one in doing so and stop processing, then this is a great use case of Deferred[F, A].
 //  - Two processes will try to complete at the same time but only one will succeed, completing the deferred primitive exactly once. The loser one will raise an error when trying to complete a deferred already completed and automatically be canceled by the IO.race mechanism, that’s why we call attempt on the evaluation.
@@ -39,27 +38,32 @@ import cats.effect.concurrent.Deferred
 import cats.syntax.all._
 import scala.concurrent.ExecutionContext
 
-// Needed for `start` or `Concurrent[IO]` and therefore `parSequence`
-implicit val cs = IO.contextShift(ExecutionContext.global)
+object Deferred1 extends App {
+  // Needed for `start` or `Concurrent[IO]` and therefore `parSequence`
+  implicit val cs = IO.contextShift(ExecutionContext.global)
 
-def start(d: Deferred[IO, Int]): IO[Unit] = {
-  val attemptCompletion: Int => IO[Unit] = n => d.complete(n).attempt.void
+  def start(d: Deferred[IO, Int]): IO[Unit] = {
+    val attemptCompletion: Int => IO[Unit] = n => d.complete(n).attempt.void
 
-  List(
-    IO.race(attemptCompletion(1), attemptCompletion(2)),
-    d.get.flatMap { n => IO(println(show"Result: $n")) }
-  ).parSequence.void
+    List(
+      IO.race(attemptCompletion(1), attemptCompletion(2)),
+      d.get.flatMap { n => IO(println(show"Result: $n")) }
+    ).parSequence.void
+  }
+
+  val program: IO[Unit] =
+    for {
+      d <- Deferred[IO, Int]
+      _ <- start(d)
+    } yield ()
+
+  program.unsafeRunSync()
 }
-
-val program: IO[Unit] =
-  for {
-    d <- Deferred[IO, Int]
-    _ <- start(d)
-  } yield ()
-
 
 // Cancellation
 // Deferred is a cancelable data type, if the underlying F[_] is capable of it. This means that cancelling a get will unsubscribe the registered listener and can thus avoid memory leaks.
 // However Deferred can also work with Async data types, or in situations where the cancelable behavior isn’t desirable. To do so you can use the uncancelable builder:
-//  Deferred.uncancelable[IO, Int]
 // The restriction on the uncancelable builder is just Async, whereas the restriction on the normal apply builder is Concurrent.
+object Deferred2 extends App {
+  Deferred.uncancelable[IO, Int]
+}

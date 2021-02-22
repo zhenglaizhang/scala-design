@@ -10,7 +10,7 @@ import scala.concurrent.ExecutionContext
 // joined or canceled.
 // You can think of fibers as being lightweight threads, a fiber being a concurrency primitive for doing cooperative
 // multi-tasking.
-object w {
+object w2 {
   trait Fiber[F[_], A] {
     def cancel: F[Unit]
     def join: F[A]

@@ -1,5 +1,5 @@
 // Clock provides the current time, as a pure alternative to:
-//  - Java’s System.currentTimeMillis for getting the “real-time clock” 
+//  - Java’s System.currentTimeMillis for getting the “real-time clock”
 //  - System.nanoTime for a monotonic clock useful for time measurements
 //  - JavaScript’s Date.now() and performance.now()
 //
@@ -19,12 +19,17 @@ import cats.effect._
 import cats.syntax.all._
 import scala.concurrent.duration.MILLISECONDS
 
-def measure[F[_], A](fa: F[A])
-  (implicit F: Sync[F], clock: Clock[F]): F[(A, Long)] = {
-  
+def measure[F[_], A](
+    fa: F[A]
+)(implicit F: Sync[F], clock: Clock[F]): F[(A, Long)] = {
+
   for {
-    start  <- clock.monotonic(MILLISECONDS)
+    start <- clock.monotonic(MILLISECONDS)
     result <- fa
     finish <- clock.monotonic(MILLISECONDS)
   } yield (result, finish - start)
 }
+
+import java.lang.System
+System.nanoTime
+System.currentTimeMillis
