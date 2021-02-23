@@ -64,7 +64,8 @@ object MVarApp1 extends App {
     }
 
 //  implicit val cs: ContextShift[IO] = IO.contextShift(ExecutionContext.global)
-  MVar.of[IO, Int](0).flatMap(sum(_, (0 until 100).toList))
+  // todo fix this
+//  MVar.of[IO, Int](0).flatMap(sum(_, (0 until 100).toList))
 }
 
 // https://titanwolf.org/Network/Articles/Article?AID=0b4d1ea5-8eff-4121-b874-94c05c0df851#gsc.tab=0
@@ -74,8 +75,8 @@ final class MLock(mvar: MVar2[IO, Unit]) {
   def greenLight[A](fa: IO[A]): IO[A] = acquire.bracket(_ => fa)(_ => release)
 }
 object MLock {
-  def apply(): IO[MLock] =
-    MVar[IO].of(()).map(ref => new MLock(ref))
+//  def apply(): IO[MLock] =
+//    MVar[IO].of(()).map(ref => new MLock(ref))
 }
 
 // Use-case: Producer/Consumer Channel
