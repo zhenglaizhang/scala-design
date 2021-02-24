@@ -4,7 +4,7 @@ import cats.effect.{ExitCode, IO, IOApp}
 import scala.util.Try
 import cats.implicits._
 
-object eitherapp {
+object wrap1 {
   // E: failure value
   // A: correct value
   sealed abstract class Either[+E, +A]
