@@ -26,11 +26,12 @@ object ValidateApp1 extends IOApp {
       } yield Person(name, age)
       println(r)
 
-      val r2: Either[List[String], Person] = (
-        validateUsername("wrong").toValidated,
-        validateAg1("arongai").toValidated
-      ).mapN(Person.apply).toEither
-      println(r2)
+      // todo fix this
+//      val r2: Either[List[String], Person] = (
+//        validateUsername("wrong").toValidated,
+//        validateAg1("arongai").toValidated
+//      ).mapN(Person.apply).toEither
+//      println(r2)
     }.as(ExitCode.Success)
   }
 }
@@ -79,9 +80,9 @@ object ValidateApp2 extends IOApp {
         .map(Person.tupled)
       println(r)
 
-      val r2: AppResult[Person] =
-        (validateUsername("wrong"), validateAg1("notw")).mapN(Person.apply)
-      println(r2)
+//      val r2: AppResult[Person] =
+//        (validateUsername("wrong"), validateAg1("notw")).mapN(Person.apply)
+//      println(r2)
 
       val r3 = Applicative[Validated[List[String], *]]
         .map2(validateUsername("wrong"), validateAg1("wroint"))(Person.apply)
