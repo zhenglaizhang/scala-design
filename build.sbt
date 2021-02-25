@@ -35,6 +35,8 @@ fork := true
 
 lazy val akkaVersion = "2.6.10"
 libraryDependencies ++= Seq(
+  "dev.zio" %% "zio" % "1.0.4-2",
+  "dev.zio" %% "zio-streams" % "1.0.4-2",
   "com.chuusai" %% "shapeless" % "2.3.3",
   "org.typelevel" %% "cats-core" % "2.2.0",
   "org.typelevel" %% "cats-laws" % "2.0.0" % Test,
