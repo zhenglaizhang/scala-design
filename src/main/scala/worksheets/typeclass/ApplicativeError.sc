@@ -3,6 +3,8 @@
 //  - Provide handling for types that represent the quality of an exception or an error, for example, Either[E, A]
 import cats.data.Validated
 import cats.{Applicative, ApplicativeError, Monoid}
+
+import scala.concurrent.{ExecutionContext, Future}
 object w {
   trait ApplicativeError[F[_], E] extends Applicative[F] {
     def raiseError[A](e: E): F[A]
@@ -82,3 +84,15 @@ def handlerErrorWith[F[_], M[_], A](
 
 import cats.implicits._
 handlerErrorWith(attemptDivideApplicativeErrorAbove2(3, 0))
+
+// Applicative and Traversable Functors
+// f is often referred to as an effectful function, where the Future effect is running the computation concurrently, presumably on another thread
+def traverseFuture[A, B](
+    xs: List[A]
+)(f: A => Future[B])(implicit ec: ExecutionContext): Future[List[B]] =
+  Future.traverse(xs)(f)
+
+// But what if the effect we wanted wasn’t Future? What if instead of concurrency for our effect we wanted validation
+// (Option, Either, Validated) or State ? It turns out we can abstract out the commonalities between all these data
+// types and write a generic traverse function once and for all. We can even go further and abstract over data types
+// that can be traversed over such as List, Vector, and Option.
