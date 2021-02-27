@@ -1,4 +1,4 @@
-package akka.iot
+package akka1.iot
 
 import akka.actor.typed.scaladsl.AbstractBehavior
 import akka.actor.typed.scaladsl.ActorContext

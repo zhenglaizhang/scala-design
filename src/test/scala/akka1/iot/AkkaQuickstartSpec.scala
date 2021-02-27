@@ -1,11 +1,10 @@
 //#full-example
-package com.example
+package akka1.iot
 
 import akka.actor.testkit.typed.scaladsl.ScalaTestWithActorTestKit
+import akka1.hello.Greeter
+import akka1.hello.Greeter.{Greet, Greeted}
 import org.scalatest.wordspec.AnyWordSpecLike
-import net.zhenglai.Greeter
-import net.zhenglai.Greeter.Greet
-import net.zhenglai.Greeter.Greeted
 
 //#definition
 class AkkaQuickstartSpec

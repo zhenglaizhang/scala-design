@@ -1,4 +1,4 @@
-package akka.iot
+package akka1.iot
 
 import akka.actor.testkit.typed.scaladsl.ScalaTestWithActorTestKit
 import org.scalatest.wordspec.AnyWordSpecLike

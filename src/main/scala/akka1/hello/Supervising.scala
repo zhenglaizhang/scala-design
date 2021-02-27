@@ -1,4 +1,4 @@
-package akka.hello
+package akka1.hello
 
 import akka.actor.typed.Behavior
 import akka.actor.typed.SupervisorStrategy
@@ -59,7 +59,7 @@ class SupervisedActor(ctx: ActorContext[String])
   }
 }
 
-object Main extends App {
+object Main1 extends App {
   val testSystem = ActorSystem(SupervisingActor(), "supervisingSystem")
   testSystem ! "failChild"
 }

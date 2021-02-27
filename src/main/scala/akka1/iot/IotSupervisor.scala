@@ -1,4 +1,4 @@
-package akka.iot
+package akka1.iot
 
 import akka.actor.typed.scaladsl.ActorContext
 import akka.actor.typed.scaladsl.AbstractBehavior
@@ -97,7 +97,9 @@ object DeviceGroup {
   ) extends Command
 }
 
-abstract class DeviceGroup(ctx: ActorContext[DeviceGroup.Command], groupId: String)
-    extends AbstractBehavior[DeviceGroup.Command](ctx) {
+abstract class DeviceGroup(
+    ctx: ActorContext[DeviceGroup.Command],
+    groupId: String
+) extends AbstractBehavior[DeviceGroup.Command](ctx) {
   import DeviceGroup._
 }

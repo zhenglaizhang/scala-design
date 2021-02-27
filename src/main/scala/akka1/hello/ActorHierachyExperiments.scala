@@ -1,4 +1,4 @@
-package com.example
+package akka1.hello
 
 import akka.actor.typed.ActorSystem
 import akka.actor.typed.Behavior

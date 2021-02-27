@@ -1,4 +1,4 @@
-package net.zhenglai
+package akka1.hello
 
 import akka.actor.typed.ActorRef
 import akka.actor.typed.Behavior
