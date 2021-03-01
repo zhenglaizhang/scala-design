@@ -1,5 +1,6 @@
 // Id
-//The identity monad can be seen as the ambient monad that encodes the effect of having no effect. It is ambient in the sense that plain pure values are values of Id
+// The identity monad can be seen as the ambient monad that encodes the effect of having no effect. 
+// It is ambient in the sense that plain pure values are values of Id
 object w {
   // type Id[A] is just a synonym for A.
   // We can freely treat values of type A as values of type Id[A], and vice-versa.
@@ -10,7 +11,9 @@ import cats._
 val x: Id[Int] = 1
 val y: Int = x
 
-//Using this type declaration, we can treat our Id type constructor as a Monad and as a Comonad. The pure method, which has type A => Id[A] just becomes the identity function. The map method from Functor just becomes function application:
+// Using this type declaration, we can treat our Id type constructor as a Monad and as a Comonad. 
+// The pure method, which has type A => Id[A] just becomes the identity function. 
+// The map method from Functor just becomes function application:
 
 import cats.Functor
 import cats.Monad

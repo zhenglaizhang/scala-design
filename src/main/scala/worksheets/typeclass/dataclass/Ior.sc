@@ -1,10 +1,10 @@
-// Ior -
-// Ior represents an inclusive-or relationship between two data types.
-// Either data type, which represents an “exclusive-or” relationship.
+// Ior 
+//  - Ior represents an inclusive-or relationship between two data types.
+//  - Either data type, which represents an “exclusive-or” relationship.
 //  - Ior[A, B] (also written as A Ior B) can contain either an A, a B, or both an A and B
-//  - Another similarity to Either is that Ior is right-biased, which means that the map and flatMap functions will
-//  work on the right side of the Ior, in our case the B value.
-//    - def map[B, C](fa: A Ior B)(f: B => C): A Ior C
+//  - Another similarity to Either is that Ior is right-biased, which means that the map and flatMap functions will 
+//    work on the right side of the Ior, in our case the B value.
+//  def map[B, C](fa: A Ior B)(f: B => C): A Ior C
 
 import cats.data._
 
@@ -25,18 +25,17 @@ val left = "Error".leftIor
 // This is because Ior will actually accumulate failures on the left side,
 // very similar to how the Validated data type does.
 // This means we can accumulate data on the left side while also being able to short-circuit upon the first
-// left-side-only value. For example, sometimes, we might want to accumulate warnings together with a valid result
+// left-side-only value. 
+// 
+// For example, sometimes, we might want to accumulate warnings together with a valid result
 // and only halt the computation on a “hard error”
 
 import cats.implicits._
 import cats.data.{NonEmptyChain => Nec, Ior}
 
 type Failures = Nec[String]
-
 case class Username(value: String) extends AnyVal
-
 case class Password(value: String) extends AnyVal
-
 case class User(name: Username, pw: Password)
 
 def validateUsername(u: String): Failures Ior Username = {
