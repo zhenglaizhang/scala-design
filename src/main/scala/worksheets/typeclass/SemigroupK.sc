@@ -14,7 +14,10 @@ SemigroupK[List].combineK(List(1, 2, 3), List(4, 5, 6)) ==
 // Since Semigroup operates on fully specified types, a Semigroup[Option[A]] knows the concrete type of A
 // and will use Semigroup[A].combine to combine the inner As.
 // Consequently, Semigroup[Option[A]].combine requires an implicit Semigroup[A].
-// SemigroupK[Option] operates on Option where the inner type is not fully specified and can be anything (i.e. is “universally quantified”)
+
+// In contrast, SemigroupK[Option] operates on Option where the inner type is not fully specified and can be anything
+// (i.e.
+// is “universally quantified”)
 // In the case of Option the SemigroupK[Option].combineK method has no choice but to use the orElse method of Option:
 
 Semigroup[Option[Int]].combine(Some(1), Some(2))

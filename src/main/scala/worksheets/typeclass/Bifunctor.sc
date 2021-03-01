@@ -1,3 +1,6 @@
+// Bifunctor takes two type parameters instead of one,
+// and is a functor in both of these parameters.
+// It defines a function bimap, which allows for mapping over both arguments at the same time
 object w {
 
   trait Bifunctor[F[_, _]] {
@@ -14,13 +17,10 @@ object w {
 }
 
 // Either as a Bifunctor
-
-import cats._
 import cats.implicits._
 import java.time._
 
 case class DomainError(message: String)
-
 def dateTimeFromUser: Either[Throwable, ZonedDateTime] =
   Right(ZonedDateTime.now())
 

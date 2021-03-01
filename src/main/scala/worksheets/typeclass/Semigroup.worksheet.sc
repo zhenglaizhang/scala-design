@@ -27,6 +27,8 @@ Semigroup[Int].combine(Semigroup[Int].combine(x, y), z)
 // Infix syntax is also available for types that have a Semigroup instance.
 
 import cats.syntax.semigroup._
+// or
+//import cats.syntax.all._
 
 1 |+| 2
 
@@ -73,6 +75,9 @@ val result = sumLeft |+| sumRight
 // fallback value if the list is empty. We need a power expressive abstraction, which we can find in the Monoid type
 // class.
 
+// N.B. Cats defines the Semigroup type class in cats-kernel. The cats package object defines type aliases to the
+// Semigroup from cats-kernel, so that you can simply import cats.Semigroup.
+
 def optionCombine[A: Semigroup](a: A, opt: Option[A]): A =
   opt.map(a |+| _).getOrElse(a)
 def mergeMap[K, V: Semigroup](lhs: Map[K, V], rhs: Map[K, V]): Map[K, V] =
@@ -91,5 +96,3 @@ val y = mergeMap(ym1, ym2)
 //  type of mergeMap satisfies the type of Semigroup specialized to Map[K, *] and is associative
 Semigroup[Map[Char, Int]].combine(xm1, xm2) == x
 Semigroup[Map[Int, List[String]]].combine(ym1, ym2) == y
-
-

@@ -7,7 +7,7 @@
 
 // List sum: List(1, 2, 3) and 0 as starting value
 // foldLeft: ((0 + 1) + 2) + 3
-// foldRight: 0 + (1 + (2 + 3)).
+// foldRight: 1 + (2 + (3 + 0))
 
 // since integer addition is associative, both approaches will yield the same result.
 // However, for non-associative operations, the two methods can produce different results
@@ -98,3 +98,6 @@ val allFalse = Stream.continually(false)
 Foldable[Stream]
   .foldRight(allFalse, Eval.True)((f, e) => if (f) e else Eval.False)
   .value
+
+List(1, 2, 3, 4, 5).foldRight(0) { (x, acc) => println(s"$x + $acc"); x + acc }
+List(1, 2, 3, 4, 5).foldLeft(0) { (acc, x) => println(s"$acc + $x"); acc + x }

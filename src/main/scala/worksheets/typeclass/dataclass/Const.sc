@@ -1,3 +1,5 @@
+// Const
+// todo https://typelevel.org/cats/datatypes/const.html
 // The Const data type can be thought of similarly to the const function, but as a data type.
 object w {
   // The const function takes two arguments and simply returns the first argument, ignoring the second.

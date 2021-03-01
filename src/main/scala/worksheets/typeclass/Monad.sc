@@ -30,6 +30,7 @@ implicit def optionMonad(implicit app: Applicative[Option]): Monad[Option] =
       }
   }
 
+// flatMap
 // flatMap is often considered to be the core function of Monad, and Cats follows this tradition by providing implementations of flatten and map derived from flatMap and pure.
 // flatMap has special significance in scala, as for-comprehensions rely on this method to chain together operations in a monadic context
 

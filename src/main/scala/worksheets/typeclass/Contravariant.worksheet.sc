@@ -24,9 +24,8 @@ import scala.math.Ordered._
 implicit val moneyOrdering: Ordering[Money] = Ordering.by(_.amount)
 Money(100) < Money(200)
 
-
 // Contravariant functors have a natural relationship with subtyping, dual to that of covariant functors:
-class A 
+class A
 class B extends A
 val b: B = new B
 val a: A = b
@@ -34,8 +33,5 @@ val showA: Show[A] = Show.show(a => "a!")
 val showB1: Show[B] = showA.contramap(b => b: A)
 val showB2: Show[B] = showA.contramap(identity[A])
 val showB3: Show[B] = Contravariant[Show].narrow[A, B](showA)
-// Subtyping relationships are “lifted backwards” by contravariant functors, such that if F is a lawful contravariant functor and B <: A then F[A] <: F[B], which is expressed by Contravariant.narrow.
-
-
-
-
+// Subtyping relationships are “lifted backwards” by contravariant functors,
+// such that if F is a lawful contravariant functor and B <: A then F[A] <: F[B], which is expressed by Contravariant.narrow.

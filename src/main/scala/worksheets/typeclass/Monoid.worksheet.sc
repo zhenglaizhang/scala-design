@@ -11,6 +11,7 @@ object show {
     def combine(x: A, y: A): A
   }
 
+  // Monoid extends the power of Semigroup by providing an additional empty value.
   trait Monoid[A] extends Semigroup[A] {
     // identity or zero element
     // combine(a, empty) == a
@@ -27,6 +28,7 @@ object show {
 
 import cats.Monoid
 import cats.instances.string._
+import show.Semigroup
 
 //def combineAll[A](xs: List[A])(implicit m: Monoid[A]): A =
 //  xs.foldRight(m.empty)(m.combine)
@@ -105,15 +107,34 @@ combineAll(List(Pair(1, "hello"), Pair(2, "world")))
 // For example, the NonEmptyList
 
 // How then can we collapse a List[NonEmptyList[A]]
+// For such types that only have a Semigroup we can lift into Option to get a Monoid.j
 // For any Semigroup[A], there is a Monoid[Option[A]].
+import cats.implicits._
+import cats.syntax.all._
+import cats.instances.option._
+implicit def optionMonoid[A: Semigroup]: Monoid[Option[A]] =
+  new Monoid[Option[A]] {
+    def empty: Option[A] = None
+    def combine(x: Option[A], y: Option[A]): Option[A] =
+      x match {
+        case None => y
+        case Some(xv) =>
+          y match {
+            case None     => x
+            case Some(yv) => Some(implicitly[Semigroup[A]].combine(xv, yv))
+          }
+      }
+  }
+// This is the Monoid for Option: for any Semigroup[A], there is a Monoid[Option[A]].
 
 import cats.Monoid
 import cats.data.NonEmptyList
 import cats.implicits._
 
-val xs = List(NonEmptyList(1, List(2, 3)), NonEmptyList(4, List(5, 6))))
+val xs = List(NonEmptyList(1, List(2, 3)), NonEmptyList(4, List(5, 6)))
 val lifted = xs.map(nel => Option(nel))
 Monoid.combineAll(lifted)
 
-// todo
-// Monoid.combineAllOption(xs)
+import cats.Monoid
+//todo
+//Monoid.combineAllOption(xs)
