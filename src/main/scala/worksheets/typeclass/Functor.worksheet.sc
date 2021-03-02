@@ -1,3 +1,22 @@
+import cats.Functor
+import scala.Function
+// A Functor is a ubiquitous type class involving types that have one "hole", i.e. types which have the shape F[*], such as Option, List and Future. (This is in contrast to a type like Int which has no hole, or Tuple2 which has two holes (Tuple2[*,*])).
+// The Functor category involves a single operation, named map:
+//  def map[A, B](fa: F[A])(f: A => B): F[B]
+
+implicit def function1Functor[In]: Functor[Function1[In, *]] = 
+  new Functor[Function1[In, *]] {
+    def map[A, B](fa: In => A)(f: A => B): In => B = fa andThen f
+  }
+
+// We can use Functor to "lift" a function from A => B to F[A] => F[B]:
+val lenOption: Option[String] => Option[Int] = Functor[Option].lift(_.length)
+lenOption(Some("abcd"))
+
+// Functor provides an fproduct function which pairs a value with the result of applying a function to that value.
+val source = List("Cats", "is", "awesome")
+val product = Functor[List].fproduct(source)(_.length).toMap
+
 // A functor F[_] is a type constructor of kind * -> *.
 // In the most general case, an F[A] represents a recipe that may halt, run forever, or produce 0 or more A's.
 //
@@ -40,6 +59,7 @@ import cats.Functor
 import cats.implicits._
 val listOption = List(Some(1), None, Some(2))
 Functor[List].compose[Option].map(listOption)(_ + 1)
+// List(Some(2), None, Some(3))
 
 def needsFunctor[F[_]: Functor, A](fa: F[A]): F[Unit] =
   Functor[F].map(fa)(_ => ())

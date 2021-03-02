@@ -1,7 +1,8 @@
+// State
 // State is a structure that provides a functional approach to handling application state.
 //  - State[S, A] is basically a function S => (S, A)
 //  - Where S is the type that represents your state and A is the result the function produces. In addition to
-//  returning the result of type A, the function returns a new S value, which is the updated state.
+//    returning the result of type A, the function returns a new S value, which is the updated state.
 //  - State’s special power is keeping track of state and passing it along.
 
 final case class Robot(id: Long, sentient: Boolean, name: String, model: String)
@@ -41,7 +42,8 @@ val robot = createRobot()
 // the code becomes harder to reason about.
 // In functional programming lingo, one might say that such code lacks referential transparency.
 
-//Purely functional pseudorandom values
+// Purely functional pseudorandom values
+// Since mutating state caused us trouble, let’s create an RNG that is immutable.
 final case class Seed(long: Long) {
   def next = Seed(long * 6364136223846793005L + 1442695040888963407L)
 }
@@ -136,15 +138,14 @@ val nextLong: StateT[Future, AsyncSeed, Long] = StateT { seed =>
 
 nextLong.run(AsyncSeed(0))
 
-// StateT[F[_], S, A] allows us to interleave effects of type F[_] in the computations wrapped by it
+// Since every intermediate computation returns a Future, the composite computation returns a Future as well. 
+// To summarize, StateT[F[_], S, A] allows us to interleave effects of type F[_] in the computations wrapped by it.
+// It should be noted that different combinators on StateT impose different constraints on F; for example, map only requires that F has a Functor instance, but flatMap naturally requires F to have a FlatMap instance. Have a look at the method signatures for the details.
 
 // Changing States
 sealed trait DoorState
-
 case object Open extends DoorState
-
 case object Closed extends DoorState
-
 case class Door(state: DoorState)
 
 val openImpl: State[DoorState, Unit] = State {

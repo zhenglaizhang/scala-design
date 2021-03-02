@@ -1,3 +1,6 @@
+// A semigroup for some given type A has a single operation (which we will call combine), which takes two values of type A, and returns a value of type A. This operation must be guaranteed to be associative.
+//   ((a combine b) combine c) === (a combine (b combine c)) for all possible values of a,b,c.
+
 object w {
 
   // If a type A can form a Semigroup it has an associative binary operation.
@@ -23,12 +26,22 @@ Semigroup[Int].combine(x, y)
 Semigroup[Int].combineN(2, 10)
 Semigroup[Int].combine(x, Semigroup[Int].combine(y, z))
 Semigroup[Int].combine(Semigroup[Int].combine(x, y), z)
+Semigroup[List[Int]].combine(List(1, 2, 3), List(4, 5, 6)) // List(1,2,3,4,5,6)
+
+Semigroup[Option[Int]].combine(Some(1), Some(2))
+Semigroup[Option[Int]].combine(Some(1), None)
+Semigroup[Int => Int].combine(_ + 1, _ * 10).apply(6) // 67 => function compose
 
 // Infix syntax is also available for types that have a Semigroup instance.
 
 import cats.syntax.semigroup._
 // or
 //import cats.syntax.all._
+
+Map("foo" -> Map("bar" -> 5)).combine(Map("foo" -> Map("bar" -> 6), "baz" -> Map()))
+Map("foo" -> List(1, 2)).combine(Map("foo" -> List(3, 4), "bar" -> List(42)))
+
+
 
 1 |+| 2
 
@@ -87,12 +100,21 @@ def mergeMap[K, V: Semigroup](lhs: Map[K, V], rhs: Map[K, V]): Map[K, V] =
 
 val xm1 = Map('a' -> 1, 'b' -> 2)
 val xm2 = Map('b' -> 3, 'c' -> 4)
-val x = mergeMap(xm1, xm2)
+val x1 = mergeMap(xm1, xm2)
 
 val ym1 = Map(1 -> List("hello"))
 val ym2 = Map(2 -> List("cats"), 1 -> List("world"))
-val y = mergeMap(ym1, ym2)
+val y1 = mergeMap(ym1, ym2)
 
 //  type of mergeMap satisfies the type of Semigroup specialized to Map[K, *] and is associative
 Semigroup[Map[Char, Int]].combine(xm1, xm2) == x
 Semigroup[Map[Int, List[String]]].combine(ym1, ym2) == y
+
+
+val one = Option(1)
+val two = Option(2)
+val n: Option[Int] = None
+one |+| two  // Some(3)
+one |+| n  // Some(1)
+n |+| n // None
+n |+| two // Some(2)

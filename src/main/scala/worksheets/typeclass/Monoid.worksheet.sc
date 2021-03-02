@@ -1,3 +1,6 @@
+// Monoid extends the Semigroup type class, adding an empty method to semigroup's combine. The empty method must return a value that when combined with any other instance of that type returns the other instance, i.e.
+//  (combine(x, empty) == combine(empty, x) == x)
+
 def sumInts(xs: List[Int]): Int = xs.foldRight(0)(_ + _)
 def concatStrings(xs: List[String]): String = xs.foldRight("")(_ + _)
 def unionSets[A](xs: List[Set[A]]): Set[A] =
@@ -41,8 +44,18 @@ def combineAll[A: Monoid](xs: List[A]) =
 
 Monoid[String].combine("Hi ", "there")
 Monoid[String].empty
+Monoid[String].combineAll(List())
+Monoid[String].combineAll(List("a", "b", "c"))
+Monoid[Map[String, Int]].combineAll(List(Map("a" -> 1, "b" -> 2), Map("a"->2)))
+// res: Map("a" -> 3, "b" -> 2)
+Monoid[Map[String, Int]].combineAll(List())  // Map.empty[String, Int]
+
 Monoid.apply[String].combine("Hi ", "there")
 Monoid.apply[String].empty
+
+val xs = List(1, 2, 3, 4, 5)
+xs.foldMap(identity)
+xs.foldMap(_.toString)
 
 import cats.instances.int._
 import cats.instances.option._
@@ -131,10 +144,20 @@ import cats.Monoid
 import cats.data.NonEmptyList
 import cats.implicits._
 
-val xs = List(NonEmptyList(1, List(2, 3)), NonEmptyList(4, List(5, 6)))
-val lifted = xs.map(nel => Option(nel))
+val xs2 = List(NonEmptyList(1, List(2, 3)), NonEmptyList(4, List(5, 6)))
+val lifted = xs2.map(nel => Option(nel))
 Monoid.combineAll(lifted)
 
 import cats.Monoid
-//todo
 //Monoid.combineAllOption(xs)
+
+implicit def monoidTuple[A: Monoid, B: Monoid]: Monoid[(A, B)] = new Monoid[(A, B)] {
+  def combine(x: (A, B), y: (A, B)): (A, B) = {
+    val (xa, xb) = x
+    val (ya, yb) = y
+    (Monoid[A].combine(xa, ya), Monoid[B].combine(xb, yb))
+  }
+}
+
+import cats.syntax.all._
+List(1,2,3).foldMap(i => (i, i.toString))
