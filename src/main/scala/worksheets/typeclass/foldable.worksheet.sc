@@ -1,3 +1,5 @@
+// Foldable type class instances can be defined for data structures that can be folded to a summary value.
+
 def show[A](xs: List[A]): String =
   xs.foldLeft("nil")((acc, x) => s"$x then $acc")
 

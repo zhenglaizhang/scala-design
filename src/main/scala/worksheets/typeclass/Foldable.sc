@@ -1,5 +1,9 @@
 // Foldable type class instances can be defined for data structures that can be folded to a summary value.
 //  - Most collection types have foldLeft methods, which will usually be used by the associated Foldable[_] instance.
+//
+// Foldable[F] is implemented in terms of two basic methods:
+//  - foldLeft(fa, b)(f) eagerly folds fa from left-to-right.
+//  - foldRight(fa, b)(f) lazily folds fa from right-to-left.
 
 // Foldable[F] is implemented in terms of two basic methods:
 //  - foldLeft(fa, b)(f) eagerly performs a left-associative fold over fa.
@@ -13,13 +17,19 @@
 // However, for non-associative operations, the two methods can produce different results
 import cats._
 import cats.implicits._
+
+// fold, also called combineAll, combines every value in the foldable using the given Monoid instance.
 Foldable[List].fold(List("a", "b", "c"))
+Foldable[List].fold(List(1, 2, 3, 4))
 Foldable[List].foldMap(List(1, 2, 3))(_.toString)
 Foldable[List].foldK(List(List(1, 2, 3), List(4, 5, 6)))
 Foldable[List].reduceLeftOption(List.empty[Int])(_ + _)
 Foldable[List].reduceLeftToOption(List[Int]())(_.toString)((s, i) => s + i)
 Foldable[List].reduceLeftToOption(List[Int](1, 2, 3))(_.toString)((s, i) =>
   s + i
+)
+Foldable[List].foldRight(List(1, 2, 3), Eval.now(0))((x, rest) =>
+  Eval.later(x + rest.value)
 )
 //Foldable[List]
 //  .reduceRightToOption(List(1, 2, 3, 4))(_.toString)((i, s) =>
